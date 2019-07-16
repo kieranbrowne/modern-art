@@ -123,7 +123,7 @@ void main () {
        smoothstep(0.,.1,sin(uv.y*12.*3.1415 + 3.1005))
        );
 
-  draw(mix(vec3(.6,.55,.7), vec3(.4,.3,.5),1.-length(suv)),
+  draw(mix(vec3(.6,.55,.7)*1.1, vec3(.4,.3,.5),1.-length(suv)),
        smoothstep(-0.003,.003, (mod(uv.x,1./6.)-mod(uv.y,1./6.)))
        *smoothstep(0.,.1,sin(uv.x*12.*3.1415 + 3.1415))
        );

@@ -108,24 +108,36 @@ void main () {
   vec2 suv = uv;
 
 
-  draw(vec3(.9,.3,.0),smoothstep(.0,0.,ngon(uv, vec2(0.), 4)));
-  draw(vec3(.8,.0,.2),smoothstep(.01,0.5,ngon(uv, vec2(0.), 4)));
-  draw(vec3(.3,.0,.2),smoothstep(.05,1.0,ngon(uv, vec2(0.), 4)));
+  draw(vec3(.9,.6,.2),smoothstep(.0,0.,length(uv)));
+  draw(vec3(.9,.6,.3),smoothstep(.1,0.5,length(uv)));
+  draw(vec3(.9,.2,.2),smoothstep(.05,1.0,length(uv)));
 
 
 
   // if(suv.x>0. && suv.y <=0.) uv.y*=-1.;
-  if(suv.x<=0. && suv.y <=0.) uv.x*=-1.;
-  if(suv.x>=0.003 && suv.y <=0.) {uv.x*=-1.; uv.y*=-1.;}
-  if(suv.x>=-0.002 && suv.y >=0.) uv.y*=-1.;
+  for(float i=-6.; i<= 6.; i+=4.) {
+    if(suv.x>i/6.) uv.y*=-1.;
+  }
 
-  draw(mix(vec3(.2,.2,.5),vec3(.15,.15,.3),  1.-length(suv)),
+  for(float i=-6.; i<= 6.; i+=4.) {
+    if(suv.y>i/6.) uv.x*=-1.;
+  }
+
+  for(float i=-6.; i<= 6.; i+=2.) {
+    if(suv.x>i/3.) uv.y*=-1.;
+  }
+  for(float i=-6.; i<= 6.; i+=2.) {
+    if(suv.y>i/3.) uv.x*=-1.;
+  }
+
+
+  draw(mix(vec3(.2,.9,.5),vec3(.2,.3,.5),length(uv)),
        smoothstep(0.,.1,sin(uv.y*12.*3.1415 + 3.1005))
        );
 
-  draw(mix(vec3(.6,.55,.7)*1.1, vec3(.4,.3,.5),1.-length(suv)),
+  draw(mix(vec3(.4,.6,.7)*.9,vec3(.4,.6,.7)*.3,length(uv)),
        smoothstep(-0.003,.003, (mod(uv.x,1./6.)-mod(uv.y,1./6.)))
-       *smoothstep(0.,.1,sin(uv.x*12.*3.1415 + 3.1415))
+       *smoothstep(0.,.1,sin(uv.x*12.*3.1415 + 3.1015))
        );
 
 

@@ -105,75 +105,30 @@ void draw(vec3 color, float norm) {
 
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
+  vec2 suv = uv;
 
 
-  draw(vec3(.9,.8,.6),smoothstep(.9,1.1,ngon(uv, vec2(0.), 4)));
+  draw(vec3(.9,.3,.0),smoothstep(.0,0.,ngon(uv, vec2(0.), 4)));
+  draw(vec3(.8,.0,.2),smoothstep(.01,0.5,ngon(uv, vec2(0.), 4)));
+  draw(vec3(.3,.0,.2),smoothstep(.05,1.0,ngon(uv, vec2(0.), 4)));
 
-  // c += cnoise(uv*20.)/20.;
-  c += cnoise(uv*120.)/70.;
-  c += cnoise(uv*80.)/100.;
-  c += cnoise(uv*280.)/40.;
 
-  uv.y += cnoise(vec2(uv.x,uv.y/2.)*10.)/420.;
-  uv.y += cnoise(vec2(uv.x,uv.y/3.)*19.)/920.;
-  uv.y += cnoise(vec2(uv.x,uv.y/3.)*39.)/420.;
 
-  draw(vec3(0.),smoothstep(-0.2,.3,-sin(cnoise(uv*19.)+cnoise(uv*2.))/2.+sin((uv*1.1).y*290.))
-       * (smoothstep(.5,.494,ngon(uv*vec2(1.,-1.7)*2,vec2(.4,1.7),3))
-       + smoothstep(.5,.494,ngon(uv*vec2(-1.,1.7)*2,vec2(.4,1.7),3))
-          + smoothstep(.5,.494,ngon(uv*rotate(3.141*.5)*vec2(-1.,1.7)*2,vec2(.4,1.7),3))
-          + smoothstep(.5,.494,ngon(uv*rotate(3.141*.5)*vec2(1.,-1.7)*2,vec2(.4,1.7),3))
-          )
+  // if(suv.x>0. && suv.y <=0.) uv.y*=-1.;
+  if(suv.x<=0. && suv.y <=0.) uv.x*=-1.;
+  if(suv.x>=0.003 && suv.y <=0.) {uv.x*=-1.; uv.y*=-1.;}
+  if(suv.x>=-0.002 && suv.y >=0.) uv.y*=-1.;
+
+  draw(mix(vec3(.2,.2,.5),vec3(.15,.15,.3),  1.-length(suv)),
+       smoothstep(0.,.1,sin(uv.y*12.*3.1415 + 3.1005))
        );
 
-  draw(vec3(0.),smoothstep(-0.2,.3,-sin(cnoise(uv*19.)+cnoise(uv*2.))/2.+sin((uv*1.1 + .20).y*290.))
-       * (
-          smoothstep(.65,.644,ngon(uv,vec2(0),4))
-          // -smoothstep(.75,.744,ngon(uv*vec2(1.,5.),vec2(0.,2.5),4))
-          // -smoothstep(.75,.744,ngon(uv*vec2(1.,5.),vec2(0.,-2.5),4))
-          // +smoothstep(.45,.444,ngon(uv,vec2(0),4))
-          - smoothstep(.405,.40,ngon(uv,vec2(0),4))
-          // - smoothstep(.305,.30,ngon(uv,vec2(0),4))
-          + smoothstep(.205,.20,ngon(uv,vec2(0),4))
-          - smoothstep(.5,.494,ngon(uv*vec2(-1.,1.7)*2,vec2(.4,1.7),3))
-          - smoothstep(.5,.494,ngon(uv*rotate(3.141*.5)*vec2(-1.,1.7)*2,vec2(.4,1.7),3))
-          - smoothstep(.5,.494,ngon(uv*rotate(3.141*.5)*vec2(1.,-1.7)*2,vec2(.4,1.7),3))
-          - smoothstep(.5,.494,ngon(uv*vec2(1.,-1.7)*2,vec2(.4,1.7),3))
-
-          )
+  draw(mix(vec3(.6,.55,.7), vec3(.4,.3,.5),1.-length(suv)),
+       smoothstep(-0.003,.003, (mod(uv.x,1./6.)-mod(uv.y,1./6.)))
+       *smoothstep(0.,.1,sin(uv.x*12.*3.1415 + 3.1415))
        );
 
 
-  // draw(vec3(0.),smoothstep(-0.2,.3,-sin(cnoise(uv*19.+9.)+cnoise(uv*2.+2.))/2.+sin((uv*1.1 +0.4).y*290.))
-  //      * smoothstep(.903,.90, abs(uv.x+cnoise(uv*19.)/299.))
-  //      * smoothstep(.105,.10, abs(uv.y-.71))
-  //      - smoothstep(.5,.494,ngon(uv*vec2(1.,-1.8)*2,vec2(.4,2.8),3))
-  //      );
-
-
-  // draw(vec3(0.),smoothstep(-0.2,.3,-sin(cnoise(uv*19.)+cnoise(uv*2.))/2.+sin((uv*1.1).y*290.))
-  //      * (smoothstep(.3,.294,ngon(uv*vec2(-1.,-1.8)*2,vec2(.4,-1.2),3))
-  //       + smoothstep(.5,.494,ngon(uv*vec2(-1.,1.8)*2,vec2(.4,2.8),3))
-  //         + smoothstep(.903,.90, abs(uv.x+cnoise(uv*19.)/299.))
-  //         * smoothstep(.265,.26, abs(uv.y-.00))
-  //         - smoothstep(.49,.485,ngon(uv*vec2(-1.,1.8)*2,vec2(-.925,0.5),3))
-  //         - smoothstep(.495,.490,ngon(uv*vec2(1.,-1.8)*2,vec2(-.925,0.5),3))
-
-  //         )
-  //      );
-
-  // draw(vec3(0.),smoothstep(-0.2,.3,-sin(cnoise(uv*19.+9.)+cnoise(uv*2.+2.))/2.+sin((uv*1.1 +0.4).y*290.))
-  //      * smoothstep(.903,.90, abs(uv.x+cnoise(uv*19.)/299.))
-  //      * smoothstep(.105,.10, abs(uv.y+.71))
-  //      - smoothstep(.5,.494,ngon(uv*vec2(-1.,1.8)*2,vec2(.4,2.8),3))
-  //      // + smoothstep(.5,.494,ngon(uv*vec2(-1.,1.8)*2,vec2(-.925,0.5),3))
-  //      );
-
-  // draw(vec3(0.),smoothstep(-0.2,.3,-sin(cnoise(uv*19.+9.)+cnoise(uv*2.+2.))/2.+sin((uv*1.1 +0.4).y*290.))
-  //      * (smoothstep(.490,.485,ngon(uv*vec2(-1.,1.8)*2,vec2(-.925,0.5),3))
-  //      + smoothstep(.495,.490,ngon(uv*vec2(1.,-1.8)*2,vec2(-.925,0.5),3))
-  //         )
-  //      );
 
 
   gl_FragColor = vec4(c, 1.);

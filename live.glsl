@@ -2,11 +2,34 @@ mat2 rotate(float theta) {
   return mat2(cos(theta), -sin(theta),sin(theta),cos(theta));
 }
 
+// pixel pos
+vec2 uv;
+// background color
+vec3 c = vec3(.32,.29,0.00);
+
+//c.yx *= rotate(1.);
+
+
+mat3 yuv = mat3(1., 0., 1.13983, 1., -.39465, -.5806, 1., 2.03211, 0.);
+
 
 float noise(vec2 p) {
   return fract(sin(dot(p, vec2(12.9898,126.7378)))
                * 43758.5453) * 2.0-1.0;
 }
+
+
+float ngon(vec2 pos, int n) {
+  vec2 tuv = uv + pos;
+  float a = atan(tuv.x,tuv.y)+3.145;
+  float r = 6.28/float(n);
+  return cos(floor(.5+a/r)*r-a)*length(tuv);
+}
+
+float circle(vec2 pos) {
+  return length(uv+pos);
+}
+
 
 vec2 fade(vec2 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
@@ -46,112 +69,113 @@ float cnoise(vec2 P){
   return 2.3 * n_xy;
 }
 
-float ngon(vec2 uv, vec2 pos, int n) {
-  uv += pos;
-  float a = atan(uv.x,uv.y)+3.145;
-  float r = 6.28/float(n);
-  return cos(floor(.5+a/r)*r-a)*length(uv);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void draw(vec3 color, float norm) {
+  c = mix(c, color, max(0.,norm));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-vec3 thing(vec3 c, vec3 col, vec2 pos, vec2 uv, float r) {
-
-  c = mix(c, col, smoothstep(r,r-.01,ngon(uv+cnoise(uv/2.)/20., pos,95)));
-  c = mix(c, col+vec3(0.,.3,0.), smoothstep(r+.04,r-.1,ngon(uv+cnoise(uv/2.)/20., pos,95)));
-  c = mix(c, col+vec3(-.07,0.14,0.3), smoothstep(r+.04,.0,ngon(uv+cnoise(uv*3.)/30., pos,95)));
-
-  return c;
-}
-
 
 
 void main () {
-  vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
+  uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
+  draw(vec3(0.30,0.24,0.12)*1.3, smoothstep(1.0,.4,ngon(vec2(0.), 4)));
+  draw(vec3(0.32,0.29,0.0)*.9, smoothstep(.97,1.,ngon(vec2(0.), 4)));
 
-  vec3 c = vec3(.09,.00,0.00);
-  //c = vec3(0.33,.24,0.9);
-  // grid
-  c = mix(c, vec3(1.0), smoothstep(.8,1.4,cos(uv*100.).x)* smoothstep(.0,.9,cos(uv*100.).y));
-  c = mix(c, vec3(1.0), smoothstep(.8,1.4,cos(uv*100.).y)* smoothstep(.0,.9,cos(uv*100.).x));
+  c += cnoise(uv*90.)/32.*cnoise(uv*2.)+cnoise(uv*190.)/92.*(1.+cnoise(uv*4.));
+  //draw(vec3(1.,0.,1.),.1+cnoise(uv*64.)*0.05+noise(uv)*.04);
 
+  draw(vec3(.73,0.18,0.08)+cnoise(uv*40.)/70.+cnoise(uv*100.)/70.,
+       smoothstep(.9,.88,ngon(vec2(0.), 4))
+       * smoothstep(.6,.62,ngon(vec2(0.), 4))
+       + smoothstep(.42,.40,ngon(vec2(0.), 4))
+       * smoothstep(.20,.22,ngon(vec2(0.), 4))
+       * smoothstep(.12,.14,ngon(vec2(0.29, .082), 4))
+       * smoothstep(.12,.14,ngon(vec2(0.29, .082)*rotate(3.14), 4))
+       * smoothstep(.12,.14,ngon(vec2(0.29, .082)*rotate(3.14*1.5), 4))
+       * smoothstep(.12,.14,ngon(vec2(0.29, .082)*rotate(3.14*.5), 4))
+       );
 
+  draw(vec3(.83,0.23,0.38)+cnoise(uv*90.)/22.+cnoise(uv*190.)/22.,
+       smoothstep(.9,.58,ngon(vec2(0.), 4))
+       * smoothstep(.6,.82,ngon(vec2(0.), 4))
+       + smoothstep(.42,.12,ngon(vec2(0.), 4))
+       * smoothstep(.20,.22,ngon(vec2(0.), 4))
+       * smoothstep(.30,.32,ngon(vec2(0.), 4))
+       * smoothstep(.12,.14,ngon(vec2(0.29, .082), 4))
+       * smoothstep(.12,.14,ngon(vec2(0.29, .082)*rotate(3.14), 4))
+       * smoothstep(.12,.14,ngon(vec2(0.29, .082)*rotate(3.14*1.5), 4))
+       * smoothstep(.12,.14,ngon(vec2(0.29, .082)*rotate(3.14*.5), 4))
+       );
 
-
-  c = mix(c, vec3(0.3,.4,.8), smoothstep(.1,.9,cnoise(uv*1.8)+noise(uv*2.)/14.+noise(uv)/14.));
-  c = mix(c, vec3(0.9,.8,.0), smoothstep(.5,1.3,cnoise(uv*2.9)+noise(uv*2.)/14.+noise(uv)/4.));
-
-
-  c = mix(c, vec3(1.0,.2,.0), smoothstep(.8,1.4,cos(uv*100.).y)* smoothstep(.0,.9,cos(uv*100.).x) * smoothstep(-.2,.0,cnoise(uv*1.8)+noise(uv*2.)/14.+noise(uv)/14.));
-
-
-  //uv*=rotate(1.);
-  // uv+=vec2(cnoise(uv*2.+iGlobalTime*vec2(1.,0.))/40.);
-
-
-  for(float i=-1.; i< 1.; i+= .2) {
-    for(float j=-1.; j< 1.; j+= .2) {
-      c = mix(c,thing(c, vec3(1.0,.6,.0), vec2(i,j), uv, .1), 1.-smoothstep(0.,1.9,length(uv+vec2(i+.9,-j))+ tan(i*2.+10.+j*9.) +tan(j*2./2. -i*10.)));
-    }
+  if(uv.x+uv.y>0.) {
+    uv *= rotate(3.14*-.5);
   }
-  c = mix(c,thing(c, vec3(1.,.2,.3), vec2(.0,.0), uv, .9), length(uv+vec2(1.,0.)));
+  draw(vec3(.0,.2,.3)+cnoise(uv*80)*.02+cnoise(uv*120)*.02,
+       smoothstep(.87,.9,max(0.,cos(uv.y*6.2 +3.14)))
+       * smoothstep(.00,.99,ngon(vec2(0.), 4))
+       * smoothstep(.60,.61,ngon(vec2(0.), 4))
+       );
+  draw(vec3(.0,.3,.4)+cnoise(uv*80)*.02+cnoise(uv*120)*.02,
+       smoothstep(.87,.9,max(0.,cos(uv.y*6.2 +3.14)))
+       * smoothstep(.90,.99,ngon(vec2(0.), 4))
+       * smoothstep(.60,.81,ngon(vec2(0.), 4))
+       -.0
+       );
 
+  if(-uv.x+uv.y>0.) {
+    uv *= rotate(3.14159*1.5);
+  }
 
-  // c = mix(c,thing(c, vec3(.2,.9,.9), vec2(-.05,.0), uv, .8), 1.-length(uv+vec2(1.,0.)));
-  c = mix(c,thing(c, vec3(.1,.9,.9), vec2(1.25,.3), uv, .50), -length(uv+vec2(1.,0.)));
-  // c = mix(c,thing(c, vec3(.0,.1,0.), vec2(-.1,.0), uv, .6), 1.-length(uv+vec2(1.,0.)));
-  c = mix(c,thing(c, vec3(.2,.3,.9), vec2(-.4,.0), uv, .5), length(uv+vec2(.1,0.)));
-  // c = mix(c,thing(c, vec3(1.0,1.0,.10), vec2(1.5,.9), uv, 1.2), smoothstep(.4,.39,ngon(uv*vec2(1.3,0.9)*rotate(.2),vec2(1.3,.4), 3))-.01);
-  c = mix(c,thing(c, vec3(.1,.1,1.), vec2(.9,-.7), uv, .3), smoothstep(.3,.4,ngon(uv,vec2(1.,-1.),3)));
-  // c = mix(c,thing(c, vec3(.0,.1,.2), vec2(-1.4,.8), uv, .4), 1-length(uv+vec2(1.,0.)));
-  c= mix(c,thing(c, vec3(.9,.1,.1), vec2(-1.4,.8), uv, .4), length(uv+vec2(1.,0.)));
+  draw(vec3(.9,.3,.3)+cnoise(uv*80)*.02+cnoise(uv*120)*.02,
+       smoothstep(.77,.8,max(0.,cos(uv.y*8.4 )))
+       * smoothstep(.60,.61,ngon(vec2(0.), 4))
+       * smoothstep(.09,.10,abs(uv.x))
+       * smoothstep(.9,.89,abs(uv.x))
+       -.1
+       );
 
+  draw(vec3(.9,.3,.3)+cnoise(uv*80)*.02+cnoise(uv*120)*.02,
+       smoothstep(.77,.8,max(0.,sin(uv.y*9.4 )))
+       * smoothstep(.60,.61,ngon(vec2(0.), 4))
+       * smoothstep(.39,.30,abs(uv.x))
+       * smoothstep(.29,.28,abs(uv.x))
+       -.1
+       );
 
-  // c = mix(c,thing(c, vec3(1.,1.,1.), vec2(-.9,.1), uv, .4), 1.-length(uv));
-  // c = mix(c,thing(c, vec3(1.,1.,1.), vec2(-.9,.1), uv, .2), 1.-length(uv));
-
-  // c = mix(c,thing(c, vec3(1.,1.,1.), vec2(.9,.1), uv, .4), 1.-length(uv));
-  // c = mix(c,thing(c, vec3(1.,1.,1.), vec2(.9,.1), uv, .3), 1.-length(uv));
-
-  // c = thing(c, vec3(0.,.0,1.), vec2(-.3,.4), uv, .2);
-  // c = thing(c, vec3(0.,.0,1.), vec2(-.0,.4), uv, .2);
-
-  // c = thing(c, vec3(1.,.0,.0), vec2(-.3,.0), uv, .2);
-
-  // c = thing(c, vec3(1.,.0,.0), vec2(-.3,-.4), uv, .2);
-
-  //c += smoothstep(.48,.8,noise(uv)/2.)*20.
+  draw(vec3(.0,.4,.4)+cnoise(uv*20.)/2.,
+       smoothstep(.0,1.9,max(0.,cos((uv+cnoise(uv*.49)).y*93. + 3.14)))
+       * smoothstep(1.,.999,ngon(vec2(0.), 4))
+       * smoothstep(.59,.58,ngon(vec2(0.), 4))
+       -.1
+       );
 
   gl_FragColor = vec4(c, 1.);
 }

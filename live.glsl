@@ -122,17 +122,18 @@ void main () {
 
   vec2 suv = uv;
 
-  suv *= rotate(3.1415*.24);
+  suv *= rotate(3.1415*1.75);
 
-  suv += cos(length(uv)*90.)/90.;
-  suv += cos(length(uv)*90.)/90.;
+  //suv += mod(length(uv*rotate(length(uv))*2.)*20.,1.)/140.;
+  // suv += mod(length(uv)*20.,-2.)/10.;
+  suv += min(mod(length(uv)*20.,4.), 4. - mod(length(uv)*20.,4.))/20.;
 
 
   draw(vec3(.95,.94,.9),smoothstep(.0,0.,length(uv)));
 
 
   draw(vec3(0.2,.13,.14),
-       smoothstep(.2,.4/length(uv),sin(atan(suv.x,suv.y)*100)/2+.5)
+       smoothstep(.2,.4/length(uv),sin(atan(suv.x,suv.y)*70)/2+.5)
        * smoothstep(.9,.895,length(uv))
        );
 

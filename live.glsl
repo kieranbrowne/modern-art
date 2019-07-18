@@ -126,7 +126,8 @@ void main () {
 
   //suv += mod(length(uv*rotate(length(uv))*2.)*20.,1.)/140.;
   // suv += mod(length(uv)*20.,-2.)/10.;
-  suv += min(mod(length(uv)*20.,4.), 4. - mod(length(uv)*20.,4.))/20.;
+  // suv += min(mod(length(uv)*20.,4.), 4. - mod(length(uv)*20.,4.))/20.;
+  suv *= rotate(min(mod(length(uv)*20.,4.), 4. - mod(length(uv)*20.,4.))/5.);
 
 
   draw(vec3(.95,.94,.9),smoothstep(.0,0.,length(uv)));

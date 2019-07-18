@@ -131,6 +131,7 @@ void main () {
 
 
   draw(vec3(.95,.94,.9),smoothstep(.0,0.,length(uv)));
+  draw(vec3(.99,.92,.88)*.85,smoothstep(.8,1.1,ngon(uv,vec2(0.),4)));
 
 
   draw(vec3(0.2,.13,.14),

@@ -122,8 +122,10 @@ void main () {
 
   vec2 suv = uv;
 
-  suv += sin(length(uv)*20.)/20.;
-  suv += cos(length(uv)*20.)/20.;
+  suv *= rotate(3.1415*.24);
+
+  suv += cos(length(uv)*90.)/90.;
+  suv += cos(length(uv)*90.)/90.;
 
 
   draw(vec3(.95,.94,.9),smoothstep(.0,0.,length(uv)));

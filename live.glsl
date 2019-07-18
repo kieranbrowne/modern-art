@@ -93,9 +93,23 @@ float cnoise(vec2 P){
 
 
 
+float smin( float a, float b, float k )
+{
+  float h = clamp( 0.5+0.5*(b-a)/k, 0.0, 1.0 );
+  return mix( b, a, h ) - k*h*(1.0-h);
+}
 
+// float smin( float a, float b, float k )
+// {
+//   a = pow( a, k ); b = pow( b, k );
+//   return pow( (a*b)/(a+b), 1.0/k );
+// }
 
-
+float sdBox( in vec2 p, in vec2 b )
+{
+  vec2 d = abs(p)-b;
+  return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);
+}
 
 
 void draw(vec3 color, float norm) {
@@ -105,45 +119,20 @@ void draw(vec3 color, float norm) {
 
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
+
   vec2 suv = uv;
 
-
-  draw(vec3(.9,.6,.2),smoothstep(.0,0.,length(uv)));
-  draw(vec3(.9,.6,.3),smoothstep(.1,0.5,length(uv)));
-  draw(vec3(.9,.2,.2),smoothstep(.05,1.0,length(uv)));
+  suv += sin(length(uv)*20.)/20.;
+  suv += cos(length(uv)*20.)/20.;
 
 
-
-  // if(suv.x>0. && suv.y <=0.) uv.y*=-1.;
-  for(float i=-6.; i<= 6.; i+=4.) {
-    if(suv.x>i/6.) uv.y*=-1.;
-  }
-
-  for(float i=-6.; i<= 6.; i+=4.) {
-    if(suv.y>i/6.) uv.x*=-1.;
-  }
-
-  for(float i=-6.; i<= 6.; i+=2.) {
-    if(suv.x>i/3.) uv.y*=-1.;
-  }
-  for(float i=-6.; i<= 6.; i+=2.) {
-    if(suv.y>i/3.) uv.x*=-1.;
-  }
+  draw(vec3(.95,.94,.9),smoothstep(.0,0.,length(uv)));
 
 
-  draw(mix(vec3(.2,.9,.5),vec3(.2,.3,.5),length(uv)),
-       smoothstep(0.,.1,sin(uv.y*12.*3.1415 + 3.1005))
+  draw(vec3(0.2,.13,.14),
+       smoothstep(.2,.4/length(uv),sin(atan(suv.x,suv.y)*100)/2+.5)
+       * smoothstep(.9,.895,length(uv))
        );
-
-  draw(mix(vec3(.4,.6,.7)*.9,vec3(.4,.6,.7)*.3,length(uv)),
-       smoothstep(-0.003,.003, (mod(uv.x,1./6.)-mod(uv.y,1./6.)))
-       *smoothstep(0.,.1,sin(uv.x*12.*3.1415 + 3.1015))
-       );
-
-
-
 
   gl_FragColor = vec4(c, 1.);
 }
-
-

@@ -1,3 +1,4 @@
+#define S(a,b,x) smoothstep(a,b,x)
 mat2 rotate(float theta) {
   return mat2(cos(theta), -sin(theta),sin(theta),cos(theta));
 }
@@ -120,22 +121,70 @@ void draw(vec3 color, float norm) {
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  vec2 suv = uv;
+  uv += cnoise(uv*20.)/1190.;
+  uv += cnoise(uv*60.)/990.;
 
-  // suv += sin(length(uv)*20.)/20.;
-  // suv += cos(length(uv)*20.)/20.;
+  draw(vec3(.75,.74,.73)*1.1,smoothstep(.0,0.,length(uv)));
 
-  suv *= rotate(smoothstep(-.4,.4,sin(length(uv*31.)))/9.);
+  draw(vec3(.75,.74,.73),smoothstep(.01,.00,sdBox(uv-vec2(-.8,.5),vec2(.5,.8))));
 
+  draw(vec3(.79,.79,.82)*.96,smoothstep(.01,.00,sdBox(uv,vec2(.8,.8))));
 
-  draw(vec3(.95,.94,.9),smoothstep(.0,0.,length(uv)));
-  draw(vec3(.99,.92,.88)*.85,smoothstep(.8,1.1,ngon(uv,vec2(0.),4)));
-
-
-  draw(vec3(0.2,.13,.14),
-       smoothstep(.2,.4/length(uv),sin(atan(suv.x,suv.y)*100)/2+.5)
-       * smoothstep(.9,.895,length(uv))
+  draw(vec3(.69,.69,.69),
+       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.8)))
        );
+
+  draw(vec3(.9,.9,.9),
+       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.5)))
+       );
+
+  draw(vec3(.84,.9,.98)*.94,
+       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.5)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.645),vec2(.35,.15)))
+       );
+
+  draw(vec3(.7,.75,.9)*.95,
+       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.5)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.5,-.3),vec2(.35,.5)))
+       );
+
+  draw(vec3(.72,.72,.73)*1.07,
+       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,-.3),vec2(.35,.8)))
+       );
+
+  draw(vec3(.85,.78,.23)*1.07,
+       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,-.3),vec2(.35,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,+.4),vec2(.35,.1)))
+       );
+
+  draw(vec3(.55,.18,.13)*1.10,
+       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,-.3),vec2(.35,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,+.4),vec2(.35,.1)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-1.0,+.4),vec2(.35,.1)))
+       );
+
+  draw(vec3(0.1),
+       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,-.3),vec2(.35,.8)))
+       *smoothstep(.01,.00,sdBox(uv+vec2(-.2,+.09),vec2(.35,.2)))
+       );
+
+  c += cnoise(uv*20)/190.;
+  c += cnoise(uv*50)/190.;
+  c += cnoise(uv*150)/190.;
+  c += cnoise(uv*130)/190.;
+
+  draw(vec3(0.),S(.9,1.5,ngon(uv,vec2(0.),4)));
 
   gl_FragColor = vec4(c, 1.);
 }

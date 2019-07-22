@@ -121,74 +121,56 @@ void draw(vec3 color, float norm) {
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  uv *= rotate(3.1415*.25);
 
-  uv += cnoise(uv*20.)/1190.;
-  uv += cnoise(uv*60.)/990.;
+  draw(vec3(.95,.91,.79),smoothstep(.0,0.,length(uv)));
 
-  draw(vec3(.75,.74,.79)*1.1,smoothstep(.0,0.,length(uv)));
 
-  draw(vec3(.79,.78,.89)*.9,smoothstep(.01,.00,sdBox(uv-vec2(-.0,.1),vec2(.9,.6))));
-  draw(vec3(.79,.78,.89)*.9,smoothstep(.01,.00,sdBox(uv-vec2(-.0,.1),vec2(.4,.9))));
-  draw(vec3(.79,.78,.89)*.9,smoothstep(.01,.00,sdBox(uv-vec2(-.0,-.3),vec2(.6,.9))));
+  float d = S(0.5,.0,distance(uv, vec2(.5,.5)))/240.;
 
-  draw(vec3(.89,.86,.72),smoothstep(.01,.00,sdBox(uv,vec2(.8,.8))));
-
-  draw(vec3(.99,.69,.69),
-       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(.1,-.3),vec2(.25,.9)))
+  if(uv.x>0.&&uv.y>0.)
+  draw(vec3(0.),
+       S(.006+d,.008+d, min(mod(uv.x,1./14.), 1./14. - mod(uv.x,1./14.)))
+       * S(.006+d,.008+d, min(mod(uv.y,1./14.), 1./14. - mod(uv.y,1./14.)))
        );
 
-  draw(vec3(.9,.9,.99),
-       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.5)))
+
+  d = S(0.7,.0,distance(uv, -vec2(.5,.5)))/170.;
+  if(uv.x<=0.&& uv.y<=0.)
+    draw(vec3(0.),
+         S(.006-d,.008-d, min(mod(uv.x,1./14.), 1./14. - mod(uv.x,1./14.)))
+         * S(.006-d,.008-d, min(mod(uv.y,1./14.), 1./14. - mod(uv.y,1./14.)))
+         );
+
+
+  // top left
+  if(uv.x<=0.&&uv.y>0.)
+    draw(vec3(0.),
+         S(.006,.008, min(mod(uv.x,1./14.), 1./14. - mod(uv.x,1./14.)))
+         * S(.006,.008, min(mod(uv.y,1./14.), 1./14. - mod(uv.y,1./14.)))
+         );
+  if(uv.x<=0.&&uv.y>0.)
+    draw(vec3(.95,.91,.79),
+         S(.004,.005, min(mod(uv.x,1./14.*3.), 1./14. - mod(uv.x,1./14.*3.)))
+         * S(.004,.005, min(mod(uv.y-1.,1./14.*3.), 1./14. - mod(uv.y-1.,1./14.*3.)))
+         );
+
+  // bottom right
+  if(uv.x>0.&&uv.y<=0.)
+    draw(vec3(0.),
+         S(.006,.008, min(mod(uv.x,1./14.), 1./14. - mod(uv.x,1./14.)))
+         * S(.006,.008, min(mod(uv.y,1./14.), 1./14. - mod(uv.y,1./14.)))
+         );
+  if(uv.x>0.&&uv.y<=0.)
+    draw(vec3(.95,.91,.79),
+         S(.004,.005, min(mod(uv.x+2.,1./14.*3.), 1./14. - mod(uv.x+2.,1./14.*3.)))
+         * S(.004,.005, min(mod(uv.y,1./14.*3.), 1./14. - mod(uv.y,1./14.*3.)))
+         );
+
+  // dots
+  d = distance(uv, -vec2(0.))/210.;
+  draw(vec3(0.,0.,0.),
+       S(.006-d,.005-d, length(mod(uv,1./14.)+vec2(-1./14.,-1./14.)*.5)/5.)
        );
-
-  draw(vec3(.84,.98,.98)*.94,
-       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.4),vec2(.95,.1)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.4),vec2(.95,.3)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.645),vec2(.35,.15)))
-       );
-
-  draw(vec3(.7,.70,.9)*.95,
-       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.8),vec2(.95,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.0,-.3),vec2(.35,.5)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.5,-.3),vec2(.35,.5)))
-       );
-
-  draw(vec3(.78,.78,.79),
-       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,-.2),vec2(.35,.8)))
-       );
-
-  draw(vec3(.65,.58,1.00),
-       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.4,-.3),vec2(.35,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,+.4),vec2(.35,.1)))
-       );
-
-  draw(vec3(.95,.38,.13),
-       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,-.3),vec2(.35,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,+.4),vec2(.35,.1)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-1.0,+.6),vec2(.85,.1)))
-       );
-
-  draw(vec3(0.1),
-       smoothstep(.01,.00,sdBox(uv,vec2(.8,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.7,-.3),vec2(.35,.8)))
-       *smoothstep(.01,.00,sdBox(uv+vec2(-.4,+.09),vec2(.35,.2)))
-       );
-
-  c += cnoise(uv*20)/190.;
-  c += cnoise(uv*50)/190.;
-  c += cnoise(uv*150)/190.;
-  c += cnoise(uv*130)/190.;
-
-  // draw(vec3(0.),S(.9,1.5,ngon(uv,vec2(0.),4)));
 
   gl_FragColor = vec4(c, 1.);
 }

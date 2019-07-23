@@ -125,14 +125,14 @@ void main () {
 
   vec2 suv = uv;
 
-  float p = 1.05;
+  float p = 0.00;
   float d = 2.19;
 
   if(uv.y<=0.)
-    suv.y+= min(.80,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),vec2(p,-p),4))/d;
+    suv.y-= min(.80,ngon(uv*vec2(1.,2.1)*rotate(3.1415*.75),vec2(p,-p),4))/d;
 
   else if(uv.y>0.)
-    suv.y-= min(.80,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),vec2(p,-p),4))/d;
+    suv.y+= min(.80,ngon(uv*vec2(1.,2.1)*rotate(3.1415*.75),vec2(p,-p),4))/d;
 
 
   if(uv.y<=0.)
@@ -150,7 +150,7 @@ void main () {
   // uv.y+= pow(min(.4,ngon(uv,vec2(-0.2,-.8),90))*1.,2.);
   // uv.y+= pow(min(.4,ngon(uv,vec2(0.4,.1),90))*1.,2.);
 
-  draw(vec3(.99),smoothstep(.7,1.,cos(suv.y*120.)));
+  draw(vec3(.99),smoothstep(.7,1.,cos(suv.y*120.+pow(sin(uv.x*40.),2.)*0.)));
 
   c += cnoise(suv*vec2(1.,19.)*19.)/3.;
 

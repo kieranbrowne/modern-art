@@ -4,7 +4,7 @@ mat2 rotate(float theta) {
 }
 
 // pixel pos
-vec2 uv;
+vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 // background color
 vec3 c = vec3(.99,.9,.8);
 
@@ -119,60 +119,47 @@ void draw(vec3 color, float norm) {
 
 
 void main () {
-  uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
 
-  draw(vec3(.95,.91,.79),smoothstep(.0,0.,length(uv)));
+  draw(vec3(.11),smoothstep(.0,0.,length(uv)));
+
+  vec2 suv = uv;
+
+  float p = .23;
+  float d = 1.99;
+
+  if(uv.y<=0.)
+    suv.x-= min(.80,ngon(uv*vec2(1.,1.1)*rotate(3.1415*.75),vec2(p,-p),4))/d;
+
+  else if(uv.y>0.)
+    suv.x-= min(.80,ngon(uv*vec2(1.,1.1)*rotate(3.1415*.75),vec2(p,-p),4))/d;
 
 
-  float d = S(0.35*1.4,.2*1.4,ngon(uv, -vec2(.0,.0),3))/140.;
+  if(uv.y<=0.)
+    suv.x+= min(.8,ngon((uv*vec2(1.,1.1))*rotate(3.1415*.75),-vec2(p,-p),4))/d;
 
-  draw(vec3(0.),
-       S(.006+d,.008+d, min(mod(uv.x,1./14.), 1./14. - mod(uv.x,1./14.)))
-       * S(.006+d,.008+d, min(mod(uv.y,1./14.), 1./14. - mod(uv.y,1./14.)))
-       );
-
-
-  // d = S(0.7,.0,distance(uv, -vec2(.5,.5)))/170.;
-  // if(uv.x<=0.&& uv.y<=0.)
-  //   draw(vec3(0.),
-  //        S(.006-d,.008-d, min(mod(uv.x,1./14.), 1./14. - mod(uv.x,1./14.)))
-  //        * S(.006-d,.008-d, min(mod(uv.y,1./14.), 1./14. - mod(uv.y,1./14.)))
-  //        );
+  else if(uv.y>0.)
+    suv.x+= min(.8,ngon(uv*vec2(1.,1.1)*rotate(3.1415*.75),-vec2(p,-p),4))/d;
 
 
-  // // top left
-  // if(uv.x<=0.&&uv.y>0.)
-  //   draw(vec3(0.),
-  //        S(.006,.008, min(mod(uv.x,1./14.), 1./14. - mod(uv.x,1./14.)))
-  //        * S(.006,.008, min(mod(uv.y,1./14.), 1./14. - mod(uv.y,1./14.)))
-  //        );
-  // if(uv.x<=0.&&uv.y>0.)
-  //   draw(vec3(.95,.91,.79),
-  //        S(.004,.005, min(mod(uv.x,1./14.*3.), 1./14. - mod(uv.x,1./14.*3.)))
-  //        * S(.004,.005, min(mod(uv.y-1.,1./14.*3.), 1./14. - mod(uv.y-1.,1./14.*3.)))
-  //        );
 
-  // // bottom right
-  // if(uv.x>0.&&uv.y<=0.)
-  //   draw(vec3(0.),
-  //        S(.006,.008, min(mod(uv.x,1./14.), 1./14. - mod(uv.x,1./14.)))
-  //        * S(.006,.008, min(mod(uv.y,1./14.), 1./14. - mod(uv.y,1./14.)))
-  //        );
-  d = distance(uv, -vec2(0.))/120.;
-    draw(vec3(.95,.91,.79),
-         S(.004,.005, min(mod(uv.x+1.,1./14.*3.), 1./14. - mod(uv.x+1.,1./14.*3.)))
-         * S(.004,.005, min(mod(uv.y+1.,1./14.*3.), 1./14. - mod(uv.y+1.,1./14.*3.)))
-         * S(.91,.90,ngon(uv,vec2(0.),4))
-         * S(.004,.005, S(.2*2.,.35*2.,ngon(uv,vec2(0.),3)))
-         * S(.010-d,.011-d, length(mod(uv,1./14.)+vec2(-1./14.,-1./14.)*.5)/5.)
-         );
 
-  // // dots
-  d = distance(uv, -vec2(0.))/190.;
-  // draw(vec3(.95,.91,.79),
-  //      S(.002-d,.001-d, length(mod(uv,1./14.)+vec2(-1./14.,-1./14.)*.5)/5.)
-  //      );
+  suv+= cnoise(uv*40.)/920.;
+  suv+= cnoise(uv*90.)/720.;
+
+
+  // uv.y+= pow(min(.4,ngon(uv,vec2(-0.2,-.8),90))*1.,2.);
+  // uv.y+= pow(min(.4,ngon(uv,vec2(0.4,.1),90))*1.,2.);
+
+  draw(vec3(.99),smoothstep(.6,1.,cos(suv.x*120.)));
+
+  c += cnoise(suv*vec2(19.,1.)*19.)/3.;
+
+  c += cnoise(suv*vec2(4.,1.)*99.)/4.;
+
+
+
+
 
   gl_FragColor = vec4(c, 1.);
 }

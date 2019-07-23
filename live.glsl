@@ -129,23 +129,17 @@ void main () {
   float d = 2.19;
 
   if(uv.y<=0.)
-    suv.y+= min(.80,ngon(uv*vec2(1.,1.1)*rotate(3.1415*.75),vec2(p,-p),4))/d;
+    suv.y+= min(.80,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),vec2(p,-p),4))/d;
 
   else if(uv.y>0.)
-    suv.y-= min(.80,ngon(uv*vec2(1.,1.1)*rotate(3.1415*.75),vec2(p,-p),4))/d;
+    suv.y-= min(.80,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),vec2(p,-p),4))/d;
 
 
   if(uv.y<=0.)
-    suv.y+= min(.8,ngon((uv*vec2(1.,1.1))*rotate(3.1415*.75),-vec2(p,-p),4))/d;
+    suv.y+= min(.8,ngon((uv*vec2(2.1,1.))*rotate(3.1415*.75),-vec2(p,-p),4))/d;
 
   else if(uv.y>0.)
-    suv.y-= min(.8,ngon(uv*vec2(1.,1.1)*rotate(3.1415*.75),-vec2(p,-p),4))/d;
-
-  if(uv.y<=0.)
-    suv.y+= min(.8,ngon((uv*vec2(1.,1.1))*rotate(3.1415*.75),-vec2(0.),90))/d;
-
-  else if(uv.y>0.)
-    suv.y-= min(.8,ngon(uv*vec2(1.,1.1)*rotate(3.1415*.75),-vec2(0.),90))/d;
+    suv.y-= min(.8,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),-vec2(p,-p),4))/d;
 
 
 

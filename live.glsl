@@ -120,42 +120,24 @@ void draw(vec3 color, float norm) {
 
 void main () {
 
+  uv += cnoise(uv*80.)/790.;
 
-  draw(vec3(.11),smoothstep(.0,0.,length(uv)));
+  draw(vec3(.91,.31,.28),smoothstep(.0,0.,length(uv)));
+  draw(vec3(.92,.29,.33)*.98,smoothstep(.84,1.1,ngon(uv,vec2(0.,.1),4)));
 
-  vec2 suv = uv;
+  draw(vec3(.92,.29,.33),smoothstep(.81,.80,ngon(uv,vec2(0.,.1),4)));
+  draw(vec3(.99,.29,.39),smoothstep(.81,.30,ngon(uv,vec2(0.,.2),4)));
 
-  float p = 0.00;
-  float d = 2.19;
+  draw(vec3(.99,.29,.39),smoothstep(.61,.60,ngon(uv,vec2(0.,.2),4)));
+  draw(vec3(.97,.31,.45),smoothstep(.61,.00,ngon(uv,vec2(0.,.3),4)));
 
-  if(uv.y<=0.)
-    suv.y-= min(.80,ngon(uv*vec2(1.,2.1)*rotate(3.1415*.75),vec2(p,-p),4))/d;
+  draw(vec3(.97,.31,.45),smoothstep(.41,.40,ngon(uv,vec2(0.,.3),4)));
+  draw(vec3(.97,.31,.45)*1.1,smoothstep(.31,.00,ngon(uv,vec2(0.,.3),4)));
 
-  else if(uv.y>0.)
-    suv.y+= min(.80,ngon(uv*vec2(1.,2.1)*rotate(3.1415*.75),vec2(p,-p),4))/d;
-
-
-  if(uv.y<=0.)
-    suv.y+= min(.8,ngon((uv*vec2(2.1,1.))*rotate(3.1415*.75),-vec2(p,-p),4))/d;
-
-  else if(uv.y>0.)
-    suv.y-= min(.8,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),-vec2(p,-p),4))/d;
-
-
-
-  suv+= cnoise(uv*40.)/920.;
-  suv+= cnoise(uv*90.)/720.;
-
-
-  // uv.y+= pow(min(.4,ngon(uv,vec2(-0.2,-.8),90))*1.,2.);
-  // uv.y+= pow(min(.4,ngon(uv,vec2(0.4,.1),90))*1.,2.);
-
-  draw(vec3(.99),smoothstep(.7,1.,cos(suv.y*120.+pow(sin(uv.x*40.),2.)*0.)));
-
-  c += cnoise(suv*vec2(1.,19.)*19.)/3.;
-
-  c += cnoise(suv*vec2(1.,4.)*99.)/4.;
-
+  c += cnoise(uv*20)/220.;
+  c += cnoise(uv*42)/220.;
+  c += cnoise(uv*82)/220.;
+  c += cnoise(uv*182)/220.;
 
 
 

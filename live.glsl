@@ -117,29 +117,95 @@ void draw(vec3 color, float norm) {
   c = mix(c, color, max(0.,norm));
 }
 
+vec2 hash( vec2 p ) { p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))); return fract(sin(p)*18.5453); }
+
+vec3 voronoi( in vec2 x ) {
+    vec2 n = floor(x);
+    vec2 f = fract(x);
+
+    //----------------------------------
+    // first pass: regular voronoi
+    //----------------------------------
+	vec2 mg, mr;
+
+    float md = 8.0;
+    for( int j=-1; j<=1; j++ )
+    for( int i=-1; i<=1; i++ )
+    {
+        vec2 g = vec2(float(i),float(j));
+        vec2 o = hash( n + g );
+        vec2 r = g + o - f;
+        float d = dot(r,r);
+
+        if( d<md )
+        {
+            md = d;
+            mr = r;
+            mg = g;
+        }
+    }
+
+
+
+    //----------------------------------
+    // second pass: distance to borders
+    //----------------------------------
+    md = 8.0;
+    vec2 o;
+    for( int j=-2; j<=2; j++ )
+    for( int i=-2; i<=2; i++ )
+    {
+        vec2 g = mg + vec2(float(i),float(j));
+		    o = hash( n + g );
+        vec2 r = g + o - f;
+
+        if( dot(mr-r,mr-r)>0.00001 )
+        md = min( md, dot( 0.5*(mr+r), normalize(r-mr) ) );
+
+
+    }
+
+    return vec3( md, o);
+}
+
 
 void main () {
 
   uv += cnoise(uv*80.)/790.;
 
-  draw(vec3(.91,.31,.28),smoothstep(.0,0.,length(uv)));
-  draw(vec3(.92,.29,.33)*.98,smoothstep(.84,1.1,ngon(uv,vec2(0.,.1),4)));
+  uv += cnoise(uv*2.)/60.;
+  // // uv += cnoise(uv*10.)/90.;
+  // uv += cnoise(uv*150.)/1390.;
+  // uv += cnoise(uv*70.)/1690.;
 
-  draw(vec3(.92,.29,.33),smoothstep(.81,.80,ngon(uv,vec2(0.,.1),4)));
-  draw(vec3(.99,.29,.39),smoothstep(.81,.30,ngon(uv,vec2(0.,.2),4)));
+  draw(vec3(.95,.92,.89),smoothstep(.0,0.,length(uv)));
 
-  draw(vec3(.99,.29,.39),smoothstep(.61,.60,ngon(uv,vec2(0.,.2),4)));
-  draw(vec3(.97,.31,.45),smoothstep(.61,.00,ngon(uv,vec2(0.,.3),4)));
+  vec3 cn = voronoi( 9.*uv );
 
-  draw(vec3(.97,.31,.45),smoothstep(.41,.40,ngon(uv,vec2(0.,.3),4)));
-  draw(vec3(.97,.31,.45)*1.1,smoothstep(.31,.00,ngon(uv,vec2(0.,.3),4)));
+  // colorize
+  vec3 col = 0.5 + 0.5*cos( cn.y*6.2831 + vec3(0.0,1.0,2.0) );
 
-  c += cnoise(uv*20)/220.;
-  c += cnoise(uv*42)/220.;
-  c += cnoise(uv*82)/220.;
-  c += cnoise(uv*182)/220.;
+  if(cn.z <= 0.2)
+  col = vec3(.5,.3,.6);
+  else if(cn.z <= 0.4)
+    col = vec3(.0,.7,.5);
+  else if(cn.z<.5)
+    col = vec3(.6,.7,.4);
+  else if(cn.z<.6)
+    col = vec3(.8,.8,.8);
+  else if(cn.z<.8)
+    col = vec3(.4,.7,.9);
+  else
+    col = vec3(.88,.5,.1);
 
+  draw(col+cnoise((uv*rotate(cn.z*20.))*vec2(249.,40.))/13.,S(.3-abs(cnoise(uv*9.)*1.),1.0-abs(cnoise(uv*9.)*1.),sin((uv*rotate(cn.z*20.) +cnoise(uv*90.)/1990.*0.).x*220.) -S(.10,.02,cn.x) -S(.9,.93,ngon(uv, vec2(0.),4))*2.2 ));
 
+  draw(vec3(.95,.92,.89), smoothstep( 0.02+cnoise(uv*10.)/40., 0.00+cnoise(uv*10.)/40., cn.x ));
+  // draw(vec3(.96), smoothstep( 0.90, 0.903, ngon(uv, vec2(0.),4) ));
+
+  c += cnoise(uv*50)/80.;
+  c += cnoise(uv*150)/80.;
+  c += cnoise(uv*250)/80.;
 
 
   gl_FragColor = vec4(c, 1.);

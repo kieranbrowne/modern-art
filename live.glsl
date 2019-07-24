@@ -180,7 +180,7 @@ void main () {
 
   draw(vec3(.95,.92,.89),smoothstep(.0,0.,length(uv)));
 
-  vec3 cn = voronoi( 9.*uv + vec2(10.));
+  vec3 cn = voronoi( 9.*uv + vec2(30.));
 
   // colorize
   vec3 col = 0.5 + 0.5*cos( cn.y*6.2831 + vec3(0.0,1.0,2.0) );
@@ -198,7 +198,7 @@ void main () {
   // else
   //   col = vec3(.88,.5,.1);
 
-  draw(vec3(.2+mod(cn.z*20.,4.)*.7, mod(cn.z*20.,4.)*.8, .8+mod(cn.z*12.,1.)*.6)+cnoise((uv*rotate(cn.z*20.))*vec2(249.,40.))/13.,S(.3-abs(cnoise(uv*9.)*1.),1.0-abs(cnoise(uv*9.)*1.),sin((uv*rotate(cn.z*20.) +cnoise(uv*90.)/1990.*0.).x*220.) -S(.10,.02,cn.x) -S(.9,.93,ngon(uv, vec2(0.),4))*2.2 ));
+  draw(vec3(.2+mod(cn.z*20.,4.)*.7, mod(cn.z*31.,1.)*.8, .4+mod(cn.z*12.,1.)*.6)+cnoise((uv*rotate(cn.z*20.))*vec2(249.,40.))/13.,S(.3-abs(cnoise(uv*9.)*1.),1.0-abs(cnoise(uv*9.)*1.),sin((uv*rotate(cn.z*20.) +cnoise(uv*90.)/1990.*0.).x*220.) -S(.10,.02,cn.x) -S(.9,.93,ngon(uv, vec2(0.),4))*2.2 ));
 
   draw(vec3(.95,.92,.89), smoothstep( 0.02+cnoise(uv*10.)/40., 0.00+cnoise(uv*10.)/40., cn.x ));
   // draw(vec3(.96), smoothstep( 0.90, 0.903, ngon(uv, vec2(0.),4) ));

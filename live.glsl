@@ -221,27 +221,25 @@ void main () {
 
   int idx = 0;
 
-  for(float i=.8; i>= 0.0; i-= 1/7.4) {
-    draw(palette[idx], S(0.004 +i,.00+i,length(uv))
 
-         * (1.-
-            S(.105,.1,sdBox((uv+vec2(.0,0.84))*rotate(3.1415*.25),vec2(.5)))
-            -S(.105,.1,sdBox((uv+vec2(.0,-0.84))*rotate(3.1415*.25),vec2(.5)))
-            )
+  for(float i=.8; i>= 0.0; i-= 1/7.4) {
+    draw(palette[idx], S(0.004 +i,.00+i,length(uv*rotate(13.3)+uv.x/7.))
+         // *S(.1,.2,length(uv+.2))
+
          );
 
-    draw(palette2[5-idx], S(0.004 +i,.00+i,length(uv))
-         // * S(0.004 +i,.00+i,length(uv+vec2(.102)))
-         * (
-            S(.105,.1,sdBox((uv+vec2(.0,0.84))*rotate(3.1415*.25),vec2(.5)))
-            +S(.105,.1,sdBox((uv+vec2(.0,-0.84))*rotate(3.1415*.25),vec2(.5)))
-            )
+    draw(palette2[5-idx], S(0.004 +i,.00+i,length(uv*rotate(11.8)+uv.y/7.))
+         // * (
+         //    S(.105,.1,sdBox((uv+vec2(.0,0.84))*rotate(3.1415*.25),vec2(.5)))
+         //    +S(.105,.1,sdBox((uv+vec2(.0,-0.84))*rotate(3.1415*.25),vec2(.5)))
+         //    )
 
          );
 
     // break;
     idx ++;
   }
+
 
   c += cnoise(uv*230.)/60.;
   c += cnoise(uv*350.)/40.;

@@ -120,6 +120,20 @@ float sdLine( in vec2 p, in vec2 a, in vec2 b )
   return length( pa - ba*h );
 }
 
+float sdTriangle( in vec2 p, in vec2 p0, in vec2 p1, in vec2 p2 )
+{
+  vec2 e0 = p1-p0, e1 = p2-p1, e2 = p0-p2;
+  vec2 v0 = p -p0, v1 = p -p1, v2 = p -p2;
+  vec2 pq0 = v0 - e0*clamp( dot(v0,e0)/dot(e0,e0), 0.0, 1.0 );
+  vec2 pq1 = v1 - e1*clamp( dot(v1,e1)/dot(e1,e1), 0.0, 1.0 );
+  vec2 pq2 = v2 - e2*clamp( dot(v2,e2)/dot(e2,e2), 0.0, 1.0 );
+  float s = sign( e0.x*e2.y - e0.y*e2.x );
+  vec2 d = min(min(vec2(dot(pq0,pq0), s*(v0.x*e0.y-v0.y*e0.x)),
+                   vec2(dot(pq1,pq1), s*(v1.x*e1.y-v1.y*e1.x))),
+               vec2(dot(pq2,pq2), s*(v2.x*e2.y-v2.y*e2.x)));
+  return -sqrt(d.x)*sign(d.y);
+}
+
 
 void draw(vec3 color, float norm) {
   c = mix(c, color, max(0.,norm));
@@ -176,67 +190,43 @@ vec3 voronoi( in vec2 x ) {
     return vec3( md, o);
 }
 
-vec3 palette[5];
+vec3 palette[6];
+vec3 palette2[6];
 
 
 
 void main () {
 
+  vec2 suv = uv;
 
-  draw(vec3(.84,.84,.80),smoothstep(.0,0.,length(uv)));
 
-  vec2 gv = floor(uv*32.);
-  vec2 pv = fract(uv*32.);
+  palette[0] = vec3(255.,195.,055.)/256.;
+  palette[1] = vec3(230.,105.,00.)/256.;
+  palette[2] = vec3(230.,45.,50.)/256.;
+  palette[3] = vec3(180.,20.,20.)/256.;
+  palette[4] = vec3(80.,00.,050.)/256.;
+  palette[5] = vec3(20.,40.,120.)/256.;
 
-  palette[0] = vec3(1.,.75,.3);
-  palette[1] = vec3(1.,.45,.2);
-  palette[2] = vec3(.6,.15,.2);
-  palette[3] = vec3(.0,.1,.3);
-  palette[4] = vec3(.2,.3,.7);
+  palette2[0] = palette[0];
+  palette2[1] = vec3(100.,165.,40.)/256.;
+  palette2[2] = vec3(80.,145.,80.)/256.;
+  palette2[3] = vec3(50.,100.,100.)/256.;
+  palette2[4] = vec3(30.,80.,140.)/256.;
+  palette2[5] = palette[5];
 
-  // draw(vec3(.5,.8,.9), gv.x+1.);
+  draw(vec3(.7),smoothstep(.0,0.,length(uv)));
 
-  draw(palette[0],
-       step(-1.3,-sdLine(gv, vec2(-5.5),vec2(-5.5,24.)))
-       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
-       );
-  draw(palette[1],
-       step(-1.3,-sdLine(gv, vec2(-3.5),vec2(-3.5,26.)))
-       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
-       );
-  draw(palette[2],
-       step(-1.3,-sdLine(gv, vec2(-1.5),vec2(-1.5,28.)))
-       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
-       );
-  draw(palette[3],
-       step(-1.3,-sdLine(gv, vec2(.5),vec2(.5,28.)))
-       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
-       );
-  draw(palette[4],
-       step(-1.3,-sdLine(gv, vec2(2.5),vec2(2.5,28.)))
-       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
-       );
+  int idx = 0;
 
-  draw(palette[4],
-       (step(-.6,-sdLine(floor((uv*0.707106)*rotate(PI*.25)*32.), vec2(-14.,5.),vec2(-14.,28.)))
-        -step(-1.3,-sdLine(gv, vec2(-9.5),vec2(-9.5,24.)))
-        )
+  for(float i=2.-1/3.; i>= -0.3; i-= 1/3.) {
+    draw(palette[5-idx], S(0.004,.00,sdTriangle(uv,vec2(-1.,-1.+pow(i/1.7,3.)),vec2(1.,1.-i),vec2(1.,1.-i-1/3.))));
 
-       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
-       );
+    draw(palette2[idx], S(0.004,.00,sdTriangle(uv,vec2(1.,1.-pow(i/1.7,3.)),vec2(-1.,-1.+i),vec2(-1.,-1.+i+1/3.))));
+    // break;
+    idx ++;
+  }
 
-  // draw(vec3(.5,.8,.9),
-  //      (S(.14,.0,pv.x)
-  //       +S(.14,.0,pv.y))
-  //      *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
-  //      +S(.0025,.000,abs(.620-ngon(uv*rotate(PI*.2517),vec2(0.),4)))
-  //      );
 
-  c -= vec3(.12,.03,0.) *
-    ((S(.14,.0,pv.x)
-     +S(.14,.0,pv.y))
-    *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
-     +S(.0025,.000,abs(.620-ngon(uv*rotate(PI*.2517),vec2(0.),4))));
 
   gl_FragColor = vec4(c, 1.);
 }

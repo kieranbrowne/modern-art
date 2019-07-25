@@ -214,18 +214,38 @@ void main () {
   palette2[4] = vec3(30.,80.,140.)/256.;
   palette2[5] = palette[5];
 
-  draw(vec3(.7),smoothstep(.0,0.,length(uv)));
+  draw(vec3(.75,.55,.4)*.9,smoothstep(.0,0.,length(uv)));
+  c += cnoise(uv*200.)/60.;
+  c += cnoise(uv*320.)/40.;
+  c += cnoise(uv*280.)/50.;
 
   int idx = 0;
 
-  for(float i=2.-1/3.; i>= -0.3; i-= 1/3.) {
-    draw(palette[5-idx], S(0.004,.00,sdTriangle(uv,vec2(-1.,-1.+pow(i/1.7,3.)),vec2(1.,1.-i),vec2(1.,1.-i-1/3.))));
+  for(float i=.8; i>= 0.0; i-= 1/7.4) {
+    draw(palette[idx], S(0.004 +i,.00+i,length(uv))
 
-    draw(palette2[idx], S(0.004,.00,sdTriangle(uv,vec2(1.,1.-pow(i/1.7,3.)),vec2(-1.,-1.+i),vec2(-1.,-1.+i+1/3.))));
+         * (1.-
+            S(.105,.1,sdBox((uv+vec2(.0,0.84))*rotate(3.1415*.25),vec2(.5)))
+            -S(.105,.1,sdBox((uv+vec2(.0,-0.84))*rotate(3.1415*.25),vec2(.5)))
+            )
+         );
+
+    draw(palette2[5-idx], S(0.004 +i,.00+i,length(uv))
+         // * S(0.004 +i,.00+i,length(uv+vec2(.102)))
+         * (
+            S(.105,.1,sdBox((uv+vec2(.0,0.84))*rotate(3.1415*.25),vec2(.5)))
+            +S(.105,.1,sdBox((uv+vec2(.0,-0.84))*rotate(3.1415*.25),vec2(.5)))
+            )
+
+         );
+
     // break;
     idx ++;
   }
 
+  c += cnoise(uv*230.)/60.;
+  c += cnoise(uv*350.)/40.;
+  c += cnoise(uv*290.)/50.;
 
 
   gl_FragColor = vec4(c, 1.);

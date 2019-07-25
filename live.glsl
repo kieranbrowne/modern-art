@@ -223,16 +223,16 @@ void main () {
 
 
   for(float i=.8; i>= 0.0; i-= 1/7.4) {
-    draw(palette[idx], S(0.004 +i,.00+i,length(uv*rotate(13.3)+uv.x/7.))
+    draw(palette[idx], S(0.004 +i,.00+i,length(uv))
          // *S(.1,.2,length(uv+.2))
 
          );
 
-    draw(palette2[5-idx], S(0.004 +i,.00+i,length(uv*rotate(11.8)+uv.y/7.))
-         // * (
-         //    S(.105,.1,sdBox((uv+vec2(.0,0.84))*rotate(3.1415*.25),vec2(.5)))
-         //    +S(.105,.1,sdBox((uv+vec2(.0,-0.84))*rotate(3.1415*.25),vec2(.5)))
-         //    )
+    draw(palette2[5-idx], S(0.004 +i,.00+i,length(uv*rotate(11.8)+uv.y/8.))
+         * (
+            S(.105,.1,sdBox((uv*rotate(3.1415*.5)+vec2(.0,0.84))*rotate(3.1415*.25),vec2(.5)))
+            +S(.105,.1,sdBox((uv*rotate(PI*.5)+vec2(.0,-0.84))*rotate(3.1415*.25),vec2(.5)))
+            )
 
          );
 

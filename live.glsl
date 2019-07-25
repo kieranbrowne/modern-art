@@ -1,4 +1,5 @@
 #define S(a,b,x) smoothstep(a,b,x)
+#define PI 3.14159265359
 mat2 rotate(float theta) {
   return mat2(cos(theta), -sin(theta),sin(theta),cos(theta));
 }
@@ -112,6 +113,13 @@ float sdBox( in vec2 p, in vec2 b )
   return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);
 }
 
+float sdLine( in vec2 p, in vec2 a, in vec2 b )
+{
+  vec2 pa = p-a, ba = b-a;
+  float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
+  return length( pa - ba*h );
+}
+
 
 void draw(vec3 color, float norm) {
   c = mix(c, color, max(0.,norm));
@@ -168,45 +176,67 @@ vec3 voronoi( in vec2 x ) {
     return vec3( md, o);
 }
 
+vec3 palette[5];
+
+
 
 void main () {
 
-  uv += cnoise(uv*80.)/790.;
 
-  uv += cnoise(uv*2.)/60.;
-  // // uv += cnoise(uv*10.)/90.;
-  // uv += cnoise(uv*150.)/1390.;
-  // uv += cnoise(uv*70.)/1690.;
+  draw(vec3(.84,.84,.80),smoothstep(.0,0.,length(uv)));
 
-  draw(vec3(.95,.92,.89),smoothstep(.0,0.,length(uv)));
+  vec2 gv = floor(uv*32.);
+  vec2 pv = fract(uv*32.);
 
-  vec3 cn = voronoi( 9.*uv + vec2(90.));
+  palette[0] = vec3(1.,.75,.3);
+  palette[1] = vec3(1.,.45,.2);
+  palette[2] = vec3(.6,.15,.2);
+  palette[3] = vec3(.0,.1,.3);
+  palette[4] = vec3(.2,.3,.7);
 
-  // colorize
-  vec3 col = 0.5 + 0.5*cos( cn.y*6.2831 + vec3(0.0,1.0,2.0) );
+  // draw(vec3(.5,.8,.9), gv.x+1.);
 
-  // if(cn.z <= 0.2)
-  // col = vec3(.5,.3,.6);
-  // else if(cn.z <= 0.4)
-  //   col = vec3(.0,.6,.4);
-  // else if(cn.z<.5)
-  //   col = vec3(.6,.7,.4);
-  // else if(cn.z<.6)
-  //   col = vec3(.8,.8,.8);
-  // else if(cn.z<.8)
-  //   col = vec3(.4,.7,.9);
-  // else
-  //   col = vec3(.88,.5,.1);
+  draw(palette[0],
+       step(-1.3,-sdLine(gv, vec2(-5.5),vec2(-5.5,24.)))
+       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
+       );
+  draw(palette[1],
+       step(-1.3,-sdLine(gv, vec2(-3.5),vec2(-3.5,26.)))
+       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
+       );
+  draw(palette[2],
+       step(-1.3,-sdLine(gv, vec2(-1.5),vec2(-1.5,28.)))
+       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
+       );
+  draw(palette[3],
+       step(-1.3,-sdLine(gv, vec2(.5),vec2(.5,28.)))
+       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
+       );
+  draw(palette[4],
+       step(-1.3,-sdLine(gv, vec2(2.5),vec2(2.5,28.)))
+       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
+       );
 
-  draw(col+cnoise((uv*rotate(cn.z*20.))*vec2(249.,40.))/13.,S(.3-abs(cnoise(uv*9.)*1.),1.0-abs(cnoise(uv*9.)*1.),sin((uv*rotate(cn.z*20.) +cnoise(uv*90.)/1990.*0.).x*220.) -S(.10,.02,cn.x) -S(.9,.93,ngon(uv, vec2(0.),4))*2.2 ));
+  draw(palette[4],
+       (step(-.6,-sdLine(floor((uv*0.707106)*rotate(PI*.25)*32.), vec2(-14.,5.),vec2(-14.,28.)))
+        -step(-1.3,-sdLine(gv, vec2(-9.5),vec2(-9.5,24.)))
+        )
 
-  draw(vec3(.95,.92,.89), smoothstep( 0.02+cnoise(uv*10.)/40., 0.00+cnoise(uv*10.)/40., cn.x ));
-  // draw(vec3(.96), smoothstep( 0.90, 0.903, ngon(uv, vec2(0.),4) ));
+       *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
+       );
 
-  c += cnoise(uv*50)/80.;
-  c += cnoise(uv*150)/80.;
-  c += cnoise(uv*250)/80.;
+  // draw(vec3(.5,.8,.9),
+  //      (S(.14,.0,pv.x)
+  //       +S(.14,.0,pv.y))
+  //      *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
+  //      +S(.0025,.000,abs(.620-ngon(uv*rotate(PI*.2517),vec2(0.),4)))
+  //      );
 
+  c -= vec3(.12,.03,0.) *
+    ((S(.14,.0,pv.x)
+     +S(.14,.0,pv.y))
+    *S(.622,.620,ngon(uv*rotate(PI*.2517),vec2(0.),4))
+     +S(.0025,.000,abs(.620-ngon(uv*rotate(PI*.2517),vec2(0.),4))));
 
   gl_FragColor = vec4(c, 1.);
 }

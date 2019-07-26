@@ -137,25 +137,25 @@ void main () {
   draw(vec3(.0)*1.1,smoothstep(.0,0.,length(uv)));
 
   int i = 0;
-  ps[i++] = vec2(.14,.56);
-  ps[i++] = vec2(-.20,.50);
-  ps[i++] = vec2(.15,.87);
-  ps[i++] = vec2(.15,.47);
+  ps[i++] = vec2(-.26,.46);
+  ps[i++] = vec2(-.60,.50);
+  ps[i++] = vec2(-.30,.67);
+  ps[i++] = vec2(-.15,.07);
   ps[i++] = vec2(0.,0.);
-  ps[i++] = vec2(.3,-.8);
+  ps[i++] = vec2(-.3,-.8);
   ps[i++] = vec2(.1,-.78);
-  ps[i++] = vec2(.35,.2);
-  ps[i++] = vec2(-.5,.5);
-  ps[i++] = vec2(-.25,-.4);
-  ps[i++] = vec2(.52,.6);
-  ps[i++] = vec2(.43,-.3);
-  ps[i++] = vec2(.25,-.22);
+  ps[i++] = vec2(-.35,.0);
+  ps[i++] = vec2(-.7,.0);
+  ps[i++] = vec2(-.45,-.4);
+  ps[i++] = vec2(.52,.0);
+  ps[i++] = vec2(.43,.3);
+  ps[i++] = vec2(.25,-.11);
 
   float v = 0.;
 
   // eyes
-  v += S(.013,.006,abs(.03- length(uv+vec2(-.07,-.68))));
-  // v += S(.013,.006,abs(.03- length(uv+vec2(.05,.41))));
+  v += S(.013,.006,abs(.03- length(uv+vec2(.35,-.56))));
+  v += S(.013,.006,abs(.03- length(uv+vec2(-.41,-.11))));
 
   // lines
   for(int i=0; i<ps.length(); i++) {

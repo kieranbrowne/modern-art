@@ -1,4 +1,5 @@
 #define S(a,b,x) smoothstep(a,b,x)
+#define PI 3.14159265359
 mat2 rotate(float theta) {
   return mat2(cos(theta), -sin(theta),sin(theta),cos(theta));
 }
@@ -123,49 +124,34 @@ void draw(vec3 color, float norm) {
   c = mix(c, color, max(0.,norm));
 }
 
-vec2 ps[12];
-
 
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  uv += cnoise(uv*20.)/790.;
-  uv += cnoise(uv*60.)/790.;
-  uv += cnoise(uv*120.)/1990.;
-  // uv += cnoise(uv*10.)/190.;
+  vec2 gv = fract(uv*.5);
+  vec2 gi = floor(uv*43.2);
 
-  draw(vec3(.0)*1.1,smoothstep(.0,0.,length(uv)));
+  vec3 moroon = vec3(.6,.1,.1);
+  vec3 green = vec3(.2,.4,.3);
+  vec3 blue = vec3(.3,.4,.6);
 
-  int i = 0;
-  ps[i++] = vec2(-.26,.46);
-  ps[i++] = vec2(-.60,.50);
-  ps[i++] = vec2(-.30,.67);
-  ps[i++] = vec2(-.15,.07);
-  ps[i++] = vec2(0.,0.);
-  ps[i++] = vec2(-.3,-.8);
-  ps[i++] = vec2(.1,-.78);
-  ps[i++] = vec2(-.35,.0);
-  ps[i++] = vec2(-.7,.0);
-  ps[i++] = vec2(-.45,-.4);
-  ps[i++] = vec2(.52,.0);
-  ps[i++] = vec2(.43,.3);
-  ps[i++] = vec2(.25,-.11);
+  draw(moroon, 1.);
 
-  float v = 0.;
+  draw(green, S(.972,.97,ngon(uv, vec2(0.), 4)));
+  draw(blue, S(.672,.67,ngon(uv, vec2(0.), 4)));
+  draw(green, S(.482,.48,ngon(uv, vec2(0.), 4)));
 
-  // eyes
-  v += S(.013,.006,abs(.03- length(uv+vec2(.35,-.56))));
-  v += S(.013,.006,abs(.03- length(uv+vec2(-.41,-.11))));
+  draw(moroon,
+       S(.687,.685,ngon(uv*rotate(PI*.251), vec2(0.), 4))
+       *S(.372,.27,cos(uv.x*200.))
+       );
+  draw(moroon,
+       S(.345,.34,ngon(uv*rotate(3.1415*.251), vec2(0.), 4))
+       );
 
-  // lines
-  for(int i=0; i<ps.length(); i++) {
-    v += S(.015,.01,line(uv,ps[i],ps[i+1]));
-  }
+  c += cnoise(uv*50)/190.;
+  c += cnoise(uv*150)/190.;
 
-  // border
-  v += S(.9,.904,ngon(uv, vec2(0.),4));
-
-  draw(vec3(.9,.87,.78), min(1., v));
 
   gl_FragColor = vec4(c, 1.);
 }

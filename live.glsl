@@ -133,13 +133,27 @@ void main () {
 
   gv = fract(uv*rotate(PI*.25)*2.5 *1.414231);
 
-  draw(vec3(.9,.3,.2),
+  draw(vec3(.1,.2,.3),
+       S(.91,.90,ngon(uv,vec2(0.), 4))
+       );
+  draw(vec3(.1,.4,.3),
+       S(.91,.90,ngon(uv,vec2(0.), 4))
+       *cnoise(uv*50)*.2
+       );
+  draw(vec3(.9,.4,.3),
+       S(.91,.90,ngon(uv,vec2(0.), 4))
+       *(cnoise(uv*59)
+         *cnoise(uv*100)
+         +cnoise(uv*2))/2.
+       );
+
+  draw(vec3(.9,.3,.4),
        min(1.,
            S(.13,.12,gv.x)
            +S(.13,.12,gv.y)
            )
-       *S(9.,9.1,mod(gi.x+gi.y, 7.) + mod(gi.x,9.) +mod(gi.x+gi.y, 9.))
-       *S(9.,9.1,mod(gi.y+gi.x, 9.) + mod(gi.x,8.) +mod(gi.x, 5.))
+       *S(0.,9.1,mod(gi.x+gi.y, 9.) + mod(gi.x+gi.y,3.) +mod(gi.x+gi.y, 12.))
+       *S(12.,12.1,9.- mod(gi.y+gi.x, 8.) - mod(gi.x,2.) +mod(gi.x, 92.))
        *(cnoise(uv*2.)*.5+.2
 
          +(cnoise(uv*1.)*.9)
@@ -149,7 +163,7 @@ void main () {
        );
 
   gv = fract(uv*10.);
-  draw(vec3(.9,.6,.2),
+  draw(vec3(.9,.9,.9),
        min(1.,
            S(.03,.02,gv.x)
            +S(.03,.02,gv.y)
@@ -163,7 +177,7 @@ void main () {
        );
 
   gv = fract(uv*rotate(PI*.25)*10. *1.414231);
-  draw(vec3(.9,.6,.2),
+  draw(vec3(.9,.6,.9),
        min(1.,
            S(.07,.03,gv.x)
            +S(.07,.03,gv.y)
@@ -175,7 +189,7 @@ void main () {
          )
        *S(.91,.90,ngon(uv,vec2(0.), 4))
        );
-  draw(vec3(1.0,.6,.3),
+  draw(vec3(.4,.0,.4),
        S(.0,.9,cnoise(uv*2.)
 
          // +cnoise(uv*111.)
@@ -190,7 +204,7 @@ void main () {
          )
        *S(.91,.90,ngon(uv,vec2(0.), 4))
        );
-  draw(vec3(1.0,.9,.3),
+  draw(vec3(.40,.3,.9),
        S(.2,.3,cnoise(uv*90.)
 
          +cnoise(uv*191.)
@@ -206,12 +220,12 @@ void main () {
          )
        *S(.91,.90,ngon(uv,vec2(0.), 4))
        );
-  draw(vec3(1.0,.8,.3),
+  draw(vec3(.3,.8,.9),
        S(.2,.3,cnoise(uv*90.)
 
          +cnoise(uv*111.)
          +cnoise(uv*70.)
-         // +cnoise(uv*40.)
+         +cnoise(uv*40.)
          +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.)
          )
        *(cnoise(uv*3.9)*.5+.2
@@ -222,9 +236,26 @@ void main () {
        *S(.91,.90,ngon(uv,vec2(0.), 4))
        );
 
+  gv = fract(uv*rotate(PI*.25)*5.*sqrt(2));
+  gi = floor(uv*5.);
+  draw(vec3(.3,.8,.4),
+       min(1.,
+           S(.13,.12,gv.x)
+           +S(.13,.12,gv.y)
+           )
+       *S(0.,9.1,mod(+gi.x, 9.) + mod(gi.x,4.) +mod(gi.x, 12.))
+       *S(12.,12.1,9.- mod(gi.y, 8.) - mod(gi.y,2.) +mod(gi.y, 32.))
+       *(cnoise(uv*2.)*.5+.2
+
+         // +(cnoise(uv*1.)*.9)
+         +(cnoise(uv*18.)*.3)
+         )
+       *S(.91,.90,ngon(uv,vec2(0.), 4))
+       );
+
   uv += vec2(-1.,-1.)*.4;
 
-  draw(vec3(1.0,.7,.3),
+  draw(vec3(.0,.6,.7),
        S(.2,.3,cnoise(uv*93.)
 
          +cnoise(uv*110.)

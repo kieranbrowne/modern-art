@@ -128,29 +128,20 @@ void draw(vec3 color, float norm) {
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  vec2 gv = fract(uv*.5);
-  vec2 gi = floor(uv*43.2);
+  vec2 gv = fract(uv*20.) +.5;
+  vec2 gi = floor(uv*20.);
 
-  vec3 moroon = vec3(.6,.1,.1);
-  vec3 green = vec3(.2,.4,.3);
-  vec3 blue = vec3(.3,.4,.6);
 
-  draw(moroon, 1.);
+  if(length(uv) > .7) {
+    uv *= rotate(iGlobalTime/1.);
+  } else {
+    uv *= rotate(-iGlobalTime/1.);
+  }
 
-  draw(green, S(.972,.97,ngon(uv, vec2(0.), 4)));
-  draw(blue, S(.672,.67,ngon(uv, vec2(0.), 4)));
-  draw(green, S(.482,.48,ngon(uv, vec2(0.), 4)));
+  uv += cnoise(uv*10.)/70.;
 
-  draw(moroon,
-       S(.687,.685,ngon(uv*rotate(PI*.251), vec2(0.), 4))
-       *S(.372,.27,cos(uv.x*200.))
-       );
-  draw(moroon,
-       S(.345,.34,ngon(uv*rotate(3.1415*.251), vec2(0.), 4))
-       );
-
-  c += cnoise(uv*50)/190.;
-  c += cnoise(uv*150)/190.;
+  draw(vec3(0.), 1.);
+  draw(vec3(sin(atan(gv.x,gv.y)*5. +iGlobalTime*5.), sin(atan(gv.x,gv.y)*9. +iGlobalTime*20.), sin(atan(gv.x,gv.y)*12. +iGlobalTime*10. +length(uv)*20.)), sin(atan(uv.x,uv.y)*90.));
 
 
   gl_FragColor = vec4(c, 1.);

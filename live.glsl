@@ -7,7 +7,7 @@ mat2 rotate(float theta) {
 // pixel pos
 vec2 uv;
 // background color
-vec3 c = vec3(.99,.9,.8);
+vec3 c = vec3(.99,.93,.84);
 
 //c.yx *= rotate(1.);
 
@@ -128,20 +128,117 @@ void draw(vec3 color, float norm) {
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  vec2 gv = fract(uv*20.) +.5;
-  vec2 gi = floor(uv*20.);
+  vec2 gv = fract(uv*2.5);
+  vec2 gi = floor(uv*10.);
 
+  gv = fract(uv*rotate(PI*.25)*2.5 *1.414231);
 
-  if(length(uv) > .7) {
-    uv *= rotate(iGlobalTime/1.);
-  } else {
-    uv *= rotate(-iGlobalTime/1.);
-  }
+  draw(vec3(.9,.3,.2),
+       min(1.,
+           S(.13,.12,gv.x)
+           +S(.13,.12,gv.y)
+           )
+       *S(9.,9.1,mod(gi.x+gi.y, 7.) + mod(gi.x,9.) +mod(gi.x+gi.y, 9.))
+       *S(9.,9.1,mod(gi.y+gi.x, 9.) + mod(gi.x,8.) +mod(gi.x, 5.))
+       *(cnoise(uv*2.)*.5+.2
 
-  uv += cnoise(uv*10.)/70.;
+         +(cnoise(uv*1.)*.9)
+         +(cnoise(uv*18.)*.3)
+         )
+       *S(.91,.90,ngon(uv,vec2(0.), 4))
+       );
 
-  draw(vec3(0.), 1.);
-  draw(vec3(sin(atan(gv.x,gv.y)*5. +iGlobalTime*5.), sin(atan(gv.x,gv.y)*9. +iGlobalTime*20.), sin(atan(gv.x,gv.y)*12. +iGlobalTime*10. +length(uv)*20.)), sin(atan(uv.x,uv.y)*90.));
+  gv = fract(uv*10.);
+  draw(vec3(.9,.6,.2),
+       min(1.,
+           S(.03,.02,gv.x)
+           +S(.03,.02,gv.y)
+           )
+       *(cnoise(uv*2.)*.5+.2
+
+         +(cnoise(uv*1.)*.9)
+         +(cnoise(uv*18.)*.3)
+         )
+       *S(.91,.90,ngon(uv,vec2(0.), 4))
+       );
+
+  gv = fract(uv*rotate(PI*.25)*10. *1.414231);
+  draw(vec3(.9,.6,.2),
+       min(1.,
+           S(.07,.03,gv.x)
+           +S(.07,.03,gv.y)
+           )
+       *(cnoise(uv*3.9)*.5+.2
+
+         +(cnoise(uv*1.)*.9)
+         +(cnoise(uv*18.)*.3)
+         )
+       *S(.91,.90,ngon(uv,vec2(0.), 4))
+       );
+  draw(vec3(1.0,.6,.3),
+       S(.0,.9,cnoise(uv*2.)
+
+         // +cnoise(uv*111.)
+         // +cnoise(uv*70.)
+         +cnoise(uv*1.)
+         // +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.)
+         )
+       *(cnoise(uv*3.9)*.5+.2
+
+         +(cnoise(uv*1.)*.9)
+         +(cnoise(uv*18.)*.3)
+         )
+       *S(.91,.90,ngon(uv,vec2(0.), 4))
+       );
+  draw(vec3(1.0,.9,.3),
+       S(.2,.3,cnoise(uv*90.)
+
+         +cnoise(uv*191.)
+         +cnoise(uv*4.)
+         // +cnoise(uv*40.)
+         +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.)
+         )
+       * length(uv+.5)
+       *(cnoise(uv*99.9)*.5+.2
+
+         +(cnoise(uv*1.)*.9)
+         // +(cnoise(uv*38.)*.3)
+         )
+       *S(.91,.90,ngon(uv,vec2(0.), 4))
+       );
+  draw(vec3(1.0,.8,.3),
+       S(.2,.3,cnoise(uv*90.)
+
+         +cnoise(uv*111.)
+         +cnoise(uv*70.)
+         // +cnoise(uv*40.)
+         +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.)
+         )
+       *(cnoise(uv*3.9)*.5+.2
+
+         +(cnoise(uv*1.)*.9)
+         +(cnoise(uv*18.)*.3)
+         )
+       *S(.91,.90,ngon(uv,vec2(0.), 4))
+       );
+
+  uv += vec2(-1.,-1.)*.4;
+
+  draw(vec3(1.0,.7,.3),
+       S(.2,.3,cnoise(uv*93.)
+
+         +cnoise(uv*110.)
+         +cnoise(uv*71.)
+         // +cnoise(uv*40.)
+         +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.1)
+         )
+       *(cnoise(uv*3.9)*.5+.2
+
+         +(cnoise(uv*1.)*.9)
+         +(cnoise(uv*18.)*.3)
+         )
+       *(S(.91,.90,ngon(uv -  vec2(-1.,-1.)*.4,vec2(0.), 4))+.5)
+       );
 
 
   gl_FragColor = vec4(c, 1.);

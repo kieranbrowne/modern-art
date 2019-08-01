@@ -169,30 +169,65 @@ void main () {
           + S(.003,.00, abs(uv.y))
           )
 
-       +S(.003,.00, abs(triangle(uv,vec2(.3,0.), vec2(.0,.59), vec2(.586,.592))))
-       +S(.003,.00, abs(triangle(uv,vec2(.3,0.02), vec2(.015,.58), vec2(.570,.582))))
-       +S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
-       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
 
-           // left right angles
-           + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
-           + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
+
+       // +S(.003,.00, abs(triangle(uv,vec2(.3,0.), vec2(.0,.59), vec2(.586,.592))))
+       // +S(.003,.00, abs(triangle(uv,vec2(.3,0.02), vec2(.015,.58), vec2(.570,.582))))
+
+
+
 
            // right right angles
-           + stripedtriangle(uv,vec2(.58,.01), vec2(.32,.01), vec2(.576,.546))
+           // + stripedtriangle(uv,vec2(.58,.01), vec2(.32,.01), vec2(.576,.546))
 
-           + stripedtriangle(uv,vec2(.012,.01), vec2(.28,.01), vec2(.012,.546))
+           // + stripedtriangle(uv,vec2(.012,.01), vec2(.28,.01), vec2(.012,.546))
 
            // rects at the bottom
-           +S(.003,.0, abs(.28-ngon(uv,vec2(-.299,.295), 4)))
-           +S(.283,.28, ngon(uv,vec2(-.299,.295), 4))
-       *S(.1,1., sin(uv.x*640. +.9))
+       //     +S(.003,.0, abs(.28-ngon(uv,vec2(-.299,.295), 4)))
+       //     +S(.283,.28, ngon(uv,vec2(-.299,.295), 4))
+       // *S(.1,1., sin(uv.x*640. +.9))
 
-           +S(.003,.0, abs(.28-ngon(uv,vec2(.296,.295), 4)))
-           +S(.283,.28, ngon(uv,vec2(.296,.295), 4))
-           *S(.1,1., sin(uv.x*640. +.9))
+           // +S(.003,.0, abs(.28-ngon(uv,vec2(.296,.295), 4)))
+           // +S(.283,.28, ngon(uv,vec2(.296,.295), 4))
+           // *S(.1,1., sin(uv.x*640. +.9))
 
            )
+       );
+
+
+  draw(vec3(.2),
+  S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
+    +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
+    // left right angles
+    + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
+    + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
+       );
+
+  uv *= rotate(PI*.5);
+  draw(vec3(.2),
+       S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
+       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
+       // left right angles
+       + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
+       + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
+       );
+
+  uv *= rotate(PI*.5);
+  draw(vec3(.2),
+       S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
+       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
+       // left right angles
+       + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
+       + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
+       );
+
+  uv *= rotate(PI*.5);
+  draw(vec3(.2),
+       S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
+       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
+       // left right angles
+       + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
+       + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
        );
 
   gl_FragColor = vec4(c, 1.);

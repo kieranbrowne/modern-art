@@ -118,6 +118,25 @@ float line( in vec2 p, in vec2 a, in vec2 b )
   float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
   return length( pa - ba*h );
 }
+float triangle( in vec2 p, in vec2 p0, in vec2 p1, in vec2 p2 )
+{
+  vec2 e0 = p1-p0, e1 = p2-p1, e2 = p0-p2;
+  vec2 v0 = p -p0, v1 = p -p1, v2 = p -p2;
+  vec2 pq0 = v0 - e0*clamp( dot(v0,e0)/dot(e0,e0), 0.0, 1.0 );
+  vec2 pq1 = v1 - e1*clamp( dot(v1,e1)/dot(e1,e1), 0.0, 1.0 );
+  vec2 pq2 = v2 - e2*clamp( dot(v2,e2)/dot(e2,e2), 0.0, 1.0 );
+  float s = sign( e0.x*e2.y - e0.y*e2.x );
+  vec2 d = min(min(vec2(dot(pq0,pq0), s*(v0.x*e0.y-v0.y*e0.x)),
+                   vec2(dot(pq1,pq1), s*(v1.x*e1.y-v1.y*e1.x))),
+               vec2(dot(pq2,pq2), s*(v2.x*e2.y-v2.y*e2.x)));
+  return -sqrt(d.x)*sign(d.y);
+}
+
+float stripedtriangle(vec2 p, vec2 p0, vec2 p1, vec2 p2) {
+  return S(.003,.00, triangle(p,p0, p1, p2))
+    *S(.1,1., sin(uv.x*640. +1.9))
+    +S(.003,.00, abs(triangle(p,p0, p1, p2)));
+}
 
 
 void draw(vec3 color, float norm) {
@@ -125,152 +144,56 @@ void draw(vec3 color, float norm) {
 }
 
 
+
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  vec2 gv = fract(uv*2.5);
-  vec2 gi = floor(uv*10.);
+  uv += cnoise(uv*50.)/2950.;
+  uv += cnoise(uv*90.)/2950.;
+  uv += cnoise(uv*190.)/2950.;
 
-  gv = fract(uv*rotate(PI*.25)*2.5 *1.414231);
+  c += cnoise(uv*90.)/104.;
+  c += cnoise(uv*190.)/74.;
 
-  draw(vec3(.6,.4,.3),
-       S(.91,.90,ngon(uv,vec2(0.), 4))
-       );
-  draw(vec3(.4,.3,.2),
-       S(.91,.90,ngon(uv,vec2(0.), 4))
-       *cnoise(uv*50)*.2
-       );
-  draw(vec3(.9,.9,.3),
-       S(.91,.90,ngon(uv,vec2(0.), 4))
-       *(cnoise(uv*59)
-         *cnoise(uv*100)
-         +cnoise(uv*2))/2.
-       );
+  draw(vec3(.99,.93,.84)*.8,S(.8,1.1,ngon(uv+cnoise(uv*90)/40., vec2(0.), 4)));
 
-  draw(vec3(.9,.7,.4),
+  draw(vec3(.2),
+
        min(1.,
-           S(.13,.12,gv.x)
-           +S(.13,.12,gv.y)
+       S(.003,.00, abs(.6-ngon(uv,vec2(0.), 4)))
+       +S(.003,.00, abs(.59-ngon(uv,vec2(0.), 4)))
+
+
+       +S(.593,.59, ngon(uv,vec2(0.), 4))
+       * (S(.003,.00, abs(uv.x))
+          + S(.003,.00, abs(uv.y))
+          )
+
+       +S(.003,.00, abs(triangle(uv,vec2(.3,0.), vec2(.0,.59), vec2(.586,.592))))
+       +S(.003,.00, abs(triangle(uv,vec2(.3,0.02), vec2(.015,.58), vec2(.570,.582))))
+       +S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
+       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
+
+           // left right angles
+           + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
+           + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
+
+           // right right angles
+           + stripedtriangle(uv,vec2(.58,.01), vec2(.32,.01), vec2(.576,.546))
+
+           + stripedtriangle(uv,vec2(.012,.01), vec2(.28,.01), vec2(.012,.546))
+
+           // rects at the bottom
+           +S(.003,.0, abs(.28-ngon(uv,vec2(-.299,.295), 4)))
+           +S(.283,.28, ngon(uv,vec2(-.299,.295), 4))
+       *S(.1,1., sin(uv.x*640. +.9))
+
+           +S(.003,.0, abs(.28-ngon(uv,vec2(.296,.295), 4)))
+           +S(.283,.28, ngon(uv,vec2(.296,.295), 4))
+           *S(.1,1., sin(uv.x*640. +.9))
+
            )
-       *S(9.,9.1,mod(gi.x+gi.y, 9.) + mod(gi.x+gi.y,3.) +mod(gi.x+gi.y, 12.))
-       *S(9.,9.1,9.- mod(gi.y+gi.x, 8.) - mod(gi.x,2.) +mod(gi.x, 92.))
-       *(cnoise(uv*2.)*.5+.2
-
-         +(cnoise(uv*1.)*.9)
-         +(cnoise(uv*18.)*.3)
-         )
-       *S(.91,.90,ngon(uv,vec2(0.), 4))
        );
-
-  gv = fract(uv*10.);
-  draw(vec3(.3,.0,.3),
-       min(1.,
-           S(.03,.02,gv.x)
-           +S(.03,.02,gv.y)
-           )
-       *(cnoise(uv*2.)*.5+.2
-
-         +(cnoise(uv*1.)*.9)
-         +(cnoise(uv*18.)*.3)
-         )
-       *S(.91,.90,ngon(uv,vec2(0.), 4))
-       );
-
-  gv = fract(uv*rotate(PI*.25)*10. *1.414231);
-  draw(vec3(.3,.4,.3),
-       min(1.,
-           S(.07,.03,gv.x)
-           +S(.07,.03,gv.y)
-           )
-       *(cnoise(uv*3.9)*.5+.2
-
-         +(cnoise(uv*1.)*.9)
-         +(cnoise(uv*18.)*.3)
-         )
-       *S(.91,.90,ngon(uv,vec2(0.), 4))
-       );
-  draw(vec3(.7,.6,.4),
-       S(.0,.9,cnoise(uv*2.)
-
-         // +cnoise(uv*111.)
-         // +cnoise(uv*70.)
-         +cnoise(uv*1.)
-         // +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.)
-         )
-       *(cnoise(uv*3.9)*.5+.2
-
-         +(cnoise(uv*1.)*.9)
-         +(cnoise(uv*18.)*.3)
-         )
-       *S(.91,.90,ngon(uv,vec2(0.), 4))
-       );
-  draw(vec3(.40,.3,.0),
-       S(.2,.3,cnoise(uv*90.)
-
-         +cnoise(uv*191.)
-         +cnoise(uv*4.)
-         // +cnoise(uv*40.)
-         +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.)
-         )
-       * length(uv+.5)
-       *(cnoise(uv*99.9)*.5+.2
-
-         +(cnoise(uv*1.)*.9)
-         // +(cnoise(uv*38.)*.3)
-         )
-       *S(.91,.90,ngon(uv,vec2(0.), 4))
-       );
-  draw(vec3(.4,.6,.6),
-       S(.2,.3,cnoise(uv*90.)
-
-         +cnoise(uv*111.)
-         +cnoise(uv*70.)
-         +cnoise(uv*40.)
-         +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.)
-         )
-       *(cnoise(uv*3.9)*.5+.2
-
-         +(cnoise(uv*1.)*.9)
-         +(cnoise(uv*18.)*.3)
-         )
-       *S(.91,.90,ngon(uv,vec2(0.), 4))
-       );
-
-  gv = fract(uv*rotate(PI*.25)*5.*sqrt(2));
-  gi = floor(uv*5.);
-  draw(vec3(.3,.0,.4),
-       min(1.,
-           S(.13,.12,gv.x)
-           +S(.13,.12,gv.y)
-           )
-       *S(9.,9.1,mod(gi.x, 9.) + mod(gi.x,7.) +mod(gi.x, 10.))
-       *S(9.,4.1,mod(gi.y, 8.) + mod(gi.y,9.) +mod(gi.y, 9.))
-       *(cnoise(uv*2.)*.5+.2
-
-         +(cnoise(uv*1.)*.9)
-         +(cnoise(uv*18.)*.3)
-         )
-       *S(.91,.90,ngon(uv,vec2(0.), 4))
-       );
-
-  uv += vec2(-1.,-1.)*.4;
-
-  draw(vec3(.4,.6,.5),
-       S(.2,.3,cnoise(uv*93.)
-
-         +cnoise(uv*110.)
-         +cnoise(uv*71.)
-         // +cnoise(uv*40.)
-         +cnoise(uv*rotate(PI*.25)*vec2(2,.1)*2.1)
-         )
-       *(cnoise(uv*3.9)*.5+.2
-
-         +(cnoise(uv*1.)*.9)
-         +(cnoise(uv*18.)*.3)
-         )
-       *(S(.91,.90,ngon(uv -  vec2(-1.,-1.)*.4,vec2(0.), 4))+.5)
-       );
-
 
   gl_FragColor = vec4(c, 1.);
 }

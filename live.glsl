@@ -207,6 +207,8 @@ void main () {
   draw(vec3(.2),
        S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
        +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
+       +S(.003,.00, triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01)))
+       *S(.1,1., sin(uv.y*640. +.9))
        // left right angles
        + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
        + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
@@ -215,6 +217,7 @@ void main () {
   uv *= rotate(PI*.5);
   draw(vec3(.2),
        S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
+       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
        +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
        // left right angles
        + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
@@ -225,6 +228,8 @@ void main () {
   draw(vec3(.2),
        S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
        +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
+       +S(.003,.00, triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01)))
+       *S(.1,1., sin(uv.y*640. +.9))
        // left right angles
        + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
        + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))

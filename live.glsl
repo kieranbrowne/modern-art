@@ -150,8 +150,9 @@ void main () {
 
 
   // uv+= cnoise(uv*130)/320.;
+  uv += uv.x*length(uv.y/uv.x)*.9;
 
-  draw(vec3(.2), S(-1.2 +(.0+uv.y/2.),1.,cos(uv.x*350.+cnoise(uv*100.)/6. +cnoise(uv*120.)/8. +uv.x*120.*cos(uv.y*10.) )));
+  draw(vec3(.2), S(-1.2 +(.0+uv.y/2.),1.,cos(uv.x*350.+cnoise(uv*100.)/6. +cnoise(uv*120.)/8.  )));
 
 
   gl_FragColor = vec4(c, 1.);

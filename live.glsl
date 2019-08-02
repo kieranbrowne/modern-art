@@ -7,7 +7,7 @@ mat2 rotate(float theta) {
 // pixel pos
 vec2 uv;
 // background color
-vec3 c = vec3(.99,.93,.84);
+vec3 c = vec3(.99,.97,.89);
 
 //c.yx *= rotate(1.);
 
@@ -148,92 +148,11 @@ void draw(vec3 color, float norm) {
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  uv += cnoise(uv*50.)/2950.;
-  uv += cnoise(uv*90.)/2950.;
-  uv += cnoise(uv*190.)/2950.;
 
-  c += cnoise(uv*90.)/104.;
-  c += cnoise(uv*190.)/74.;
+  // uv+= cnoise(uv*130)/320.;
 
-  draw(vec3(.99,.93,.84)*.8,S(.8,1.1,ngon(uv+cnoise(uv*90)/40., vec2(0.), 4)));
+  draw(vec3(.2), S(-1.2 +(.0+uv.y/2.),1.,cos(uv.x*350.+cnoise(uv*100.)/6. +cnoise(uv*120.)/8. + cos(PI*.5+pow((3.-uv.y)*.54,3.5))*40.)));
 
-  draw(vec3(.2),
-
-       min(1.,
-       S(.003,.00, abs(.6-ngon(uv,vec2(0.), 4)))
-       +S(.003,.00, abs(.59-ngon(uv,vec2(0.), 4)))
-
-
-       +S(.593,.59, ngon(uv,vec2(0.), 4))
-       * (S(.003,.00, abs(uv.x))
-          + S(.003,.00, abs(uv.y))
-          )
-
-
-
-       // +S(.003,.00, abs(triangle(uv,vec2(.3,0.), vec2(.0,.59), vec2(.586,.592))))
-       // +S(.003,.00, abs(triangle(uv,vec2(.3,0.02), vec2(.015,.58), vec2(.570,.582))))
-
-
-
-
-           // right right angles
-           // + stripedtriangle(uv,vec2(.58,.01), vec2(.32,.01), vec2(.576,.546))
-
-           // + stripedtriangle(uv,vec2(.012,.01), vec2(.28,.01), vec2(.012,.546))
-
-           // rects at the bottom
-       //     +S(.003,.0, abs(.28-ngon(uv,vec2(-.299,.295), 4)))
-       //     +S(.283,.28, ngon(uv,vec2(-.299,.295), 4))
-       // *S(.1,1., sin(uv.x*640. +.9))
-
-           // +S(.003,.0, abs(.28-ngon(uv,vec2(.296,.295), 4)))
-           // +S(.283,.28, ngon(uv,vec2(.296,.295), 4))
-           // *S(.1,1., sin(uv.x*640. +.9))
-
-           )
-       );
-
-
-  draw(vec3(.2),
-  S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
-    +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
-    // left right angles
-    + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
-    + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
-       );
-
-  uv *= rotate(PI*.5);
-  draw(vec3(.2),
-       S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
-       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
-       +S(.003,.00, triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01)))
-       *S(.1,1., sin(uv.y*640. +.9))
-       // left right angles
-       + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
-       + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
-       );
-
-  uv *= rotate(PI*.5);
-  draw(vec3(.2),
-       S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
-       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
-       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
-       // left right angles
-       + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
-       + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
-       );
-
-  uv *= rotate(PI*.5);
-  draw(vec3(.2),
-       S(.003,.00, abs(triangle(uv,vec2(-.3,.59), vec2(.0,.0), vec2(-.590,.0))))
-       +S(.003,.00, abs(triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01))))
-       +S(.003,.00, triangle(uv,vec2(-.3,.57), vec2(-.017,.01), vec2(-.573,.01)))
-       *S(.1,1., sin(uv.y*640. +.9))
-       // left right angles
-       + stripedtriangle(uv,vec2(-.58,.576), vec2(-.32,.576), vec2(-.58,.04))
-       + stripedtriangle(uv,vec2(-.012,.576), vec2(-.28,.576), vec2(-.012,.05))
-       );
 
   gl_FragColor = vec4(c, 1.);
 }

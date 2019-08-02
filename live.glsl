@@ -151,11 +151,19 @@ void main () {
 
   // uv+= cnoise(uv*130)/320.;
 
-  uv *= rotate(uv.x/sign(uv.y)/1.8);
-  uv *= rotate(uv.y/sign(uv.x)/4.9);
+  uv *= rotate(PI*.5);
+
+  uv *= rotate(length(uv)*sign(uv.y)/2.8);
+  uv *= rotate(length(uv)*sign(uv.y)/1.9);
+  uv *= rotate(length(-uv)*sign(uv.y)/2.8);
+  uv *= rotate(length(-uv)*sign(uv.y)/1.8);
+  uv *= rotate(length(uv)*sign(-uv.y)/1.8);
+  uv *= rotate(length(uv)*sign(uv.y)/.9);
+  uv *= rotate(length(-uv)*sign(-uv.y)/1.8);
+  uv *= rotate(length(-uv)*sign(uv.y)/.8);
 
 
-  draw(vec3(.2), S(-1.2 +(.0+uv.y/2.),1.,cos(uv.x*350.+cnoise(uv*100.)/6. +cnoise(uv*120.)/8.  )));
+  draw(vec3(.2), S(-1.2 +(.0+uv.y/2.),1.,cos(uv.x*350.+cnoise(uv*100.)/6. +cnoise(uv*120.)/8. +iGlobalTime*4. )));
 
 
   gl_FragColor = vec4(c, 1.);

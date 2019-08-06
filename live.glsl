@@ -144,19 +144,89 @@ void draw(vec3 color, float norm) {
 }
 
 
+float hexDist(vec2 uv) {
+  return
+       max(dot(abs(uv), normalize(vec2(1.,sqrt(3)))),
+           abs(uv).x);
+}
+
+
+vec4 hexCoords(vec2 uv) {
+  vec2 rep = vec2(1.,sqrt(3.));
+  vec2 h = rep*.5;
+  vec2 a = mod(uv*5, rep) -h;
+  vec2 b = mod(uv*5-h, rep) -h;
+  vec2 gv;
+  if(length(a) < length(b))
+    gv = a;
+  else gv = b;
+
+  vec2 id = uv*5-gv;
+
+  return vec4(gv.x,gv.y,id.x,id.y);
+}
+
+
+vec3 palette [6];
+
 
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
 
+  // uv *= rotate(PI*.75);
+
   // uv+= cnoise(uv*130)/320.;
 
-  uv *= rotate(PI*.5);
+  // draw(vec3(.2), S(-1.2 +(.0+uv.y/2.),1.,cos(uv.x*350.+cnoise(uv*100.)/6. +cnoise(uv*120.)/8. + cos(PI*.5+pow((3.-uv.y)*.54,3.5))*40.)));
 
 
 
-  draw(vec3(.2), S(-1.2 +(.0+uv.y/2.),1.,cos(uv.x*350.+cnoise(uv*100.)/6. +cnoise(uv*120.)/8. +cnoise(abs(uv*rotate(iGlobalTime*0.))/1.2)*120. +iGlobalTime*0. )));
+  // draw(vec3(0.),
+  //      sin(
+  //           hexDist(uv)));
 
+  vec2 hc = hexCoords(uv).xy;
+  vec2 id = hexCoords(uv).zw;
+  // c.rg = hexCoords(uv).xy;
+
+  // draw(vec3(0.), S(.4,.5,hexDist(hc*(.5+sin(length(id) +iGlobalTime)*2.))));
+
+
+  // draw(vec3(0.),
+  //      S(.65,.66 , cnoise(id/9. +vec2(1.5,1.2)))
+  //      *S(.10,.66 , cnoise(id/9. +vec2(1.5,1.2)))
+  //      // *S(.33, .4, length(hexDist(hc)))
+       
+  //      );
+  // // draw(vec3(0.), atan(hc.x, hc.y));
+  // c.gb = hexCoords(uv).zw;
+
+  // draw(vec3(.4,.5,.9), S(.01,.00,sdBox(uv - vec2(1./3.,0.)*2.5, vec2(1./6.,1.))));
+
+  vec2 gv = vec2(fract(uv.x*3.), uv.y);
+  gv.x -= .5;
+
+  palette[0] = vec3(1.,0.,0.);
+  palette[1] = vec3(1.,1.,0.);
+  palette[2] = vec3(0.,1.,0.);
+  palette[3] = vec3(0.,1.,1.);
+  palette[4] = vec3(0.,0.,1.);
+  palette[5] = vec3(1.,1.,1.);
+
+
+  for(int i=0; i< 6; i++)
+
+    draw(palette[i],
+         S((float(5.-i)+.5)/11.0 +.01,(float(5-i)+.5)/11.0 , abs(-gv.x))
+         *S((float(i)+.0)/11.0 ,(float(i)+.0)/11.0 +.01, 3.-abs(gv.y*3.))
+         );
+
+  // draw(vec3(.4,.0,.9),
+  //      S(1/7.+.01,1/7.,abs(gv.x))
+  //      );
+  // draw(vec3(.4,.5,.9), S(.01,.00,sdBox(gv, vec2(1./24.,1.))));
+  // c.rg = gv;
 
   gl_FragColor = vec4(c, 1.);
 }

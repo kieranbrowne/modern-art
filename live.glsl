@@ -211,29 +211,30 @@ void main () {
   vec2 gi = vec2(floor(uv.x*3.), uv.y);
   gv.x -= .5;
 
-  palette[1] = vec3(106.,123.,150.)/256.;
-  palette[2] = vec3(94.,122.,191.)/256.;
-  palette[3] = vec3(109.,129.,190.)/256.;
-  palette[4] = vec3(208.,116.,220.)/256.;
-  palette[5] = vec3(290.,109.,252.)/256.;
+  palette[1] = vec3(256.,22.,30.)/256.;
+  palette[2] = vec3(294.,102.,101.)/256.;
+  palette[3] = vec3(239.,129.,190.)/256.;
+  palette[4] = vec3(248.,136.,220.)/256.;
+  palette[5] = vec3(090.,199.,152.)/256.;
 
-  outers[0] = vec3(90.,102.,108.)/256.;
-  outers[1] = vec3(105.,64.,94.)/256.;
-  outers[2] = vec3(70.,102.,219.)/256.;
+  outers[0] = vec3(090.,192.,128.)/256.;
+  outers[1] = vec3(105.,164.,194.)/256.;
+  outers[2] = vec3(170.,102.,219.)/256.;
 
 
   c += cnoise(uv*120.)*0.02;
   for(int i=0; i< 6; i++) {
     if(i>=1)
       draw(palette[i],
-           S((float(i/11.)+.5),(float(i/11.)+.5) +.01 , min(abs(1.-gv.x),abs(1.+gv.x)))
-           *S((float(5.-i)+.0)/11.0 ,(float(5.-i)+.0)/11.0 +.01, abs(gv.y*3.))
+           S((float(i/11.)+.5),(float(i/11.)+.5) +.01 , max(1.-abs(gv.x),abs(gv.y/3)))
+           *S((float(5.-i)+.0)/11.0 ,(float(5.-i)+.0)/11.0 +.01, abs(gv.x-gv.y))
            *S(1.001,1.0,abs(uv.x))
            );
     else
       draw(outers[int(mod(gi.x,3.))],
            // S((float(i/11.)+.5),(float(i/11.)+.5) +.01 , min(abs(1.-gv.x),abs(1.+gv.x)))
            S((float(5.-i)+.5)/11.0 ,(float(5.-i)+.5)/11.0 +.01,3.- abs(gv.y*3.))
+           *S((float(5.-i)+.0)/11.0 ,(float(5.-i)+.0)/11.0 +.01,abs(1./gv.y*3.))
            *S(1.001,1.0,abs(uv.x))
            );
   }

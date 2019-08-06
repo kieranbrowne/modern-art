@@ -7,7 +7,7 @@ mat2 rotate(float theta) {
 // pixel pos
 vec2 uv;
 // background color
-vec3 c = vec3(.99,.97,.89);
+vec3 c = vec3(235.,231.,222.)/259;
 
 //c.yx *= rotate(1.);
 
@@ -168,10 +168,13 @@ vec4 hexCoords(vec2 uv) {
 
 
 vec3 palette [6];
+vec3 outers [3];
 
 
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
+
+  uv*=1.2;
 
 
   // uv *= rotate(PI*.75);
@@ -205,22 +208,38 @@ void main () {
   // draw(vec3(.4,.5,.9), S(.01,.00,sdBox(uv - vec2(1./3.,0.)*2.5, vec2(1./6.,1.))));
 
   vec2 gv = vec2(fract(uv.x*3.), uv.y);
+  vec2 gi = vec2(floor(uv.x*3.), uv.y);
   gv.x -= .5;
 
-  palette[0] = vec3(1.,0.,0.);
-  palette[1] = vec3(1.,1.,0.);
-  palette[2] = vec3(0.,1.,0.);
-  palette[3] = vec3(0.,1.,1.);
-  palette[4] = vec3(0.,0.,1.);
-  palette[5] = vec3(1.,1.,1.);
+  palette[1] = vec3(166.,123.,150.)/256.;
+  palette[2] = vec3(194.,102.,131.)/256.;
+  palette[3] = vec3(226.,99.,120.)/256.;
+  palette[4] = vec3(228.,96.,60.)/256.;
+  palette[5] = vec3(230.,131.,72.)/256.;
+
+  outers[0] = vec3(90.,152.,188.)/256.;
+  outers[1] = vec3(195.,64.,94.)/256.;
+  outers[2] = vec3(70.,152.,119.)/256.;
 
 
-  for(int i=0; i< 6; i++)
+  c += cnoise(uv*120.)*0.02;
+  for(int i=0; i< 6; i++) {
+    if(i>=1)
+      draw(palette[i],
+           S((float(5.-i)+.5)/11.0 +.01,(float(5-i)+.5)/11.0 , abs(-gv.x))
+           *S((float(i)+.0)/11.0 ,(float(i)+.0)/11.0 +.01, 3.-abs(gv.y*3.))
+           *S(1.001,1.0,abs(uv.x))
+           );
+    else
+      draw(outers[int(mod(gi.x,3.))],
+           S((float(5.-i)+.5)/11.0 +.01,(float(5-i)+.5)/11.0 , abs(-gv.x))
+           *S((float(i)+.0)/11.0 ,(float(i)+.0)/11.0 +.01, 3.-abs(gv.y*3.))
+           *S(1.001,1.0,abs(uv.x))
+           );
+  }
+  c += cnoise(uv*120.)*0.01;
 
-    draw(palette[i],
-         S((float(5.-i)+.5)/11.0 +.01,(float(5-i)+.5)/11.0 , abs(-gv.x))
-         *S((float(i)+.0)/11.0 ,(float(i)+.0)/11.0 +.01, 3.-abs(gv.y*3.))
-         );
+
 
   // draw(vec3(.4,.0,.9),
   //      S(1/7.+.01,1/7.,abs(gv.x))

@@ -174,79 +174,22 @@ vec3 outers [3];
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  uv*=1.2;
 
+  draw(vec3(.55,0.,0.09), S(.008,.0,sdBox(uv,vec2(.8,.7))));
 
-  // uv *= rotate(PI*.75);
+  draw(vec3(0.,0.,0.), S(.008,.0,sdBox(uv -vec2(-.28,0.),vec2(.06,.82))));
 
-  // uv+= cnoise(uv*130)/320.;
+  draw(vec3(.8), S(.008,.0,sdBox(uv -vec2(-.16,0.),vec2(.006,.7))));
 
-  // draw(vec3(.2), S(-1.2 +(.0+uv.y/2.),1.,cos(uv.x*350.+cnoise(uv*100.)/6. +cnoise(uv*120.)/8. + cos(PI*.5+pow((3.-uv.y)*.54,3.5))*40.)));
+  draw(vec3(.8,0.1,0.1),
+       S(.008,.0,sdBox(uv -vec2(.15,0.),vec2(.565,.785)))
+       *S(.0,.008,sdBox(uv -vec2(.15,0.),vec2(.55,.77)))
+       );
 
+  c += cnoise(uv*40)*0.01;
+  c += cnoise(uv*79)*0.01;
+  c += cnoise(uv*129)*0.01;
 
-
-  // draw(vec3(0.),
-  //      sin(
-  //           hexDist(uv)));
-
-  vec2 hc = hexCoords(uv).xy;
-  vec2 id = hexCoords(uv).zw;
-  // c.rg = hexCoords(uv).xy;
-
-  // draw(vec3(0.), S(.4,.5,hexDist(hc*(.5+sin(length(id) +iGlobalTime)*2.))));
-
-
-  // draw(vec3(0.),
-  //      S(.65,.66 , cnoise(id/9. +vec2(1.5,1.2)))
-  //      *S(.10,.66 , cnoise(id/9. +vec2(1.5,1.2)))
-  //      // *S(.33, .4, length(hexDist(hc)))
-       
-  //      );
-  // // draw(vec3(0.), atan(hc.x, hc.y));
-  // c.gb = hexCoords(uv).zw;
-
-  // draw(vec3(.4,.5,.9), S(.01,.00,sdBox(uv - vec2(1./3.,0.)*2.5, vec2(1./6.,1.))));
-
-  vec2 gv = vec2(fract(uv.x*3.), uv.y);
-  vec2 gi = vec2(floor(uv.x*3.), uv.y);
-  gv.x -= .5;
-
-  palette[1] = vec3(256.,22.,30.)/256.;
-  palette[2] = vec3(294.,102.,101.)/256.;
-  palette[3] = vec3(239.,129.,190.)/256.;
-  palette[4] = vec3(248.,136.,220.)/256.;
-  palette[5] = vec3(090.,199.,152.)/256.;
-
-  outers[0] = vec3(090.,192.,128.)/256.;
-  outers[1] = vec3(105.,164.,194.)/256.;
-  outers[2] = vec3(170.,102.,219.)/256.;
-
-
-  c += cnoise(uv*120.)*0.02;
-  for(int i=0; i< 6; i++) {
-    if(i>=1)
-      draw(palette[i],
-           S((float(i/11.)+.5),(float(i/11.)+.5) +.01 , max(1.-abs(gv.x),abs(gv.y/3)))
-           *S((float(5.-i)+.0)/11.0 ,(float(5.-i)+.0)/11.0 +.01, abs(gv.x-gv.y))
-           *S(1.001,1.0,abs(uv.x))
-           );
-    else
-      draw(outers[int(mod(gi.x,3.))],
-           // S((float(i/11.)+.5),(float(i/11.)+.5) +.01 , min(abs(1.-gv.x),abs(1.+gv.x)))
-           S((float(5.-i)+.5)/11.0 ,(float(5.-i)+.5)/11.0 +.01,3.- abs(gv.y*3.))
-           *S((float(5.-i)+.0)/11.0 ,(float(5.-i)+.0)/11.0 +.01,abs(1./gv.y*3.))
-           *S(1.001,1.0,abs(uv.x))
-           );
-  }
-  c += cnoise(uv*120.)*0.01;
-
-
-
-  // draw(vec3(.4,.0,.9),
-  //      S(1/7.+.01,1/7.,abs(gv.x))
-  //      );
-  // draw(vec3(.4,.5,.9), S(.01,.00,sdBox(gv, vec2(1./24.,1.))));
-  // c.rg = gv;
 
   gl_FragColor = vec4(c, 1.);
 }

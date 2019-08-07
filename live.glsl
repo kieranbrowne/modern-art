@@ -175,15 +175,15 @@ void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
 
-  draw(vec3(.55,0.,0.09), S(.008,.0,sdBox(uv,vec2(.8,.7))));
+  draw(vec3(.15,0.1,0.49), S(.008,.0,sdBox(uv,vec2(.8,.7))));
 
-  draw(vec3(0.,0.,0.), S(.008,.0,sdBox(uv -vec2(-.28,0.),vec2(.06,.82))));
+  draw(vec3(0.06), S(.008,.0,sdBox(uv -vec2(.28,0.),vec2(.02,.82))));
 
-  draw(vec3(.8), S(.008,.0,sdBox(uv -vec2(-.16,0.),vec2(.006,.7))));
+  draw(vec3(.8), S(.008,.0,sdBox(uv -vec2(-.36,0.),vec2(.006,.7))));
 
   draw(vec3(.8,0.1,0.1),
-       S(.008,.0,sdBox(uv -vec2(.15,0.),vec2(.565,.785)))
-       *S(.0,.008,sdBox(uv -vec2(.15,0.),vec2(.55,.77)))
+       S(.008,.0,sdBox(uv -vec2(.05,0.),vec2(.565,.785)))
+       *S(.0,.008,sdBox(uv -vec2(.05,0.),vec2(.55,.77)))
        );
 
   c += cnoise(uv*40)*0.01;

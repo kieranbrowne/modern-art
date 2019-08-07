@@ -175,13 +175,13 @@ void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
 
-  draw(vec3(.15,0.1,0.49), S(.008,.0,sdBox(uv,vec2(.8,.7))));
+  draw(vec3(.01,0.15,0.04), S(.008,.0,sdBox(uv,vec2(.8,.7))));
 
-  draw(vec3(0.06), S(.008,.0,sdBox(uv -vec2(.28,0.),vec2(.02,.82))));
+  draw(vec3(0.06), S(.008,.0,sdBox(uv -vec2(-.08,0.),vec2(.10,.82))));
 
-  draw(vec3(.8), S(.008,.0,sdBox(uv -vec2(-.36,0.),vec2(.006,.7))));
+  draw(vec3(.8), S(.008,.0,sdBox(uv -vec2(-.22,0.),vec2(.006,.7))));
 
-  draw(vec3(.8,0.1,0.1),
+  draw(vec3(.2,0.1,0.3),
        S(.008,.0,sdBox(uv -vec2(.05,0.),vec2(.565,.785)))
        *S(.0,.008,sdBox(uv -vec2(.05,0.),vec2(.55,.77)))
        );

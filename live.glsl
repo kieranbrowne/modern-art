@@ -112,6 +112,13 @@ float sdBox( in vec2 p, in vec2 b )
   vec2 d = abs(p)-b;
   return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);
 }
+float sdArc( in vec2 p, in vec2 sca, in vec2 scb, in float ra, float rb )
+{
+  p *= mat2(sca.x,sca.y,-sca.y,sca.x);
+  p.x = abs(p.x);
+  float k = (scb.y*p.x>scb.x*p.y) ? dot(p.xy,scb) : length(p.xy);
+  return sqrt( dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
+}
 float line( in vec2 p, in vec2 a, in vec2 b )
 {
   vec2 pa = p-a, ba = b-a;
@@ -167,24 +174,77 @@ vec4 hexCoords(vec2 uv) {
 }
 
 
-vec3 palette [6];
-vec3 outers [3];
+void coolline(vec3 col, vec2 uv, vec2 a, vec2 b, float outline) {
+  float warp = 0.;
+  // warp += cnoise(uv)*.02;
+  warp += cnoise(uv*3)*.02;
+  warp += cnoise(uv*2)*.02;
+  warp += cnoise(uv*5)*.02;
+  // warp += cnoise(uv*9)*.01;
+  warp += cnoise(uv*29)*.004;
+  warp += cnoise(uv*49)*.001;
+  warp += cnoise(uv*149)*.0008;
+  warp += cnoise(uv*189)*.0003;
+
+  draw(vec3(.01, 0.05, 0.04),
+       S(outline+.03,outline,line(uv+warp +cnoise(uv*100)/120., a, b)));
+  draw(col,
+       S(.004,.0,line(uv+warp, a, b)));
+}
+void coolarc(vec3 col, vec2 uv, vec2 sca, vec2 scb, float ra, float rb, float outline) {
+  float warp = 0.;
+  // warp += cnoise(uv)*.02;
+  warp += cnoise(uv*3)*.02;
+  warp += cnoise(uv*2)*.02;
+  warp += cnoise(uv*5)*.02;
+  // warp += cnoise(uv*9)*.01;
+  warp += cnoise(uv*29)*.004;
+  warp += cnoise(uv*49)*.001;
+  warp += cnoise(uv*149)*.0008;
+  warp += cnoise(uv*189)*.0003;
+
+  draw(vec3(.01, 0.05, 0.04),
+       S(outline+.03,outline,
+         sdArc(uv+warp +cnoise(uv*100)/120., sca, scb, ra, rb)));
+  draw(col,
+       S(.004,.0,sdArc(uv+warp, sca, scb, ra,rb)));
+}
 
 
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
+  uv += cnoise(uv*40)*0.0004;
+  uv += cnoise(uv*80)*0.0003;
 
-  draw(vec3(.01,0.15,0.04), S(.008,.0,sdBox(uv,vec2(.8,.7))));
 
-  draw(vec3(0.06), S(.008,.0,sdBox(uv -vec2(-.08,0.),vec2(.10,.82))));
+  vec3 gold = vec3(.91, 0.75, 0.34);
+  vec3 white = vec3(.91, 0.95, 0.94);
+  vec3 black = vec3(.01, 0.05, 0.04);
 
-  draw(vec3(.8), S(.008,.0,sdBox(uv -vec2(-.22,0.),vec2(.006,.7))));
+  draw(black, 1);
+  draw(white, S(.9,1.0,sin(uv.x*200))
+       * S(.82,.81,ngon(uv, vec2(0.), 4)));
 
-  draw(vec3(.2,0.1,0.3),
-       S(.008,.0,sdBox(uv -vec2(.05,0.),vec2(.565,.785)))
-       *S(.0,.008,sdBox(uv -vec2(.05,0.),vec2(.55,.77)))
-       );
+
+  coolline(black, uv, vec2(.1,.3), vec2(-.5,.7), .01);
+  coolline(white, uv, vec2(.8,.3), vec2(.1,.5),.07);
+
+  // coolline(white, uv, vec2(.2,-.3), vec2(-.2,-.3), .07);
+
+  coolline(gold, uv, vec2(-.2,.3), vec2(-.4,.3), .02);
+  coolline(gold, uv, vec2(-.2,-.7), vec2(-.7,-.7), .02);
+
+  coolline(white, uv, vec2(.7,-.4), vec2(-.5,-.4), .03);
+
+  // coolarc(white, uv, vec2(-.02,.04), vec2(.07,-.02), .1, .1, .02);
+
+  // draw(white, S(.019,.01,sdArc(uv, vec2(.9,.9), normalize(vec2(1.2,2.2)), .4, .0)));
+
+  // coolarc(white, (uv +vec2(.4,.0))*rotate(.6), vec2(-1.2,.0), vec2(1.,.0), .2, .001, .07);
+  coolarc(gold, (uv +vec2(.4,.0))*rotate(.4), vec2(-1.8,.0), vec2(1.,.0), .2, .001, .04);
+
+
 
   c += cnoise(uv*40)*0.01;
   c += cnoise(uv*79)*0.01;

@@ -227,15 +227,24 @@ void main () {
        * S(.82,.81,ngon(uv, vec2(0.), 4)));
 
 
-  coolline(black, uv, vec2(.1,.3), vec2(-.5,.7), .01);
-  coolline(white, uv, vec2(.8,.3), vec2(.1,.5),.07);
+  // coolline(black, uv, vec2(.1,.3), vec2(-.5,.7), .01);
+  coolarc(black, (uv +vec2(-.34,.5))*rotate(4.2), vec2(-.9,.3), vec2(.25,.20), .3, .001, .01);
+
+  coolline(white, uv, vec2(.7,.4), vec2(.1,.6),.07);
+  coolline(black, uv, vec2(.7,.6), vec2(.3,.7),.01);
 
   // coolline(white, uv, vec2(.2,-.3), vec2(-.2,-.3), .07);
 
-  coolline(gold, uv, vec2(-.2,.3), vec2(-.4,.3), .02);
+  coolline(gold, uv, vec2(.5,.3), vec2(-.4,.35), .02);
+  coolline(white, uv, vec2(.5,.2), vec2(-.4,.15), .01);
+  coolline(black, uv, vec2(-.7,.2), vec2(-.4,.25), .01);
+  coolline(black, uv, vec2(-.75,-.35), vec2(-.5,-.25), .01);
   coolline(gold, uv, vec2(-.2,-.7), vec2(-.7,-.7), .02);
+  coolline(black, uv, vec2(.4,-.65), vec2(.0,-.65), .01);
 
-  coolline(white, uv, vec2(.7,-.4), vec2(-.5,-.4), .03);
+  coolline(white, uv, vec2(.5,-.4), vec2(-.5,-.4), .03);
+  coolline(white, uv, vec2(-.7,.7), vec2(-.4,.7), .015);
+  coolline(white, uv, vec2(-.7,.6), vec2(-.45,.62), .015);
 
   // coolarc(white, uv, vec2(-.02,.04), vec2(.07,-.02), .1, .1, .02);
 
@@ -243,6 +252,9 @@ void main () {
 
   // coolarc(white, (uv +vec2(.4,.0))*rotate(.6), vec2(-1.2,.0), vec2(1.,.0), .2, .001, .07);
   coolarc(gold, (uv +vec2(.4,.0))*rotate(.4), vec2(-1.8,.0), vec2(1.,.0), .2, .001, .04);
+
+  coolarc(white, (uv +vec2(-.4,-.1))*rotate(.0), vec2(-1.2,.0), vec2(1.,.0), .2, .001, .07);
+
 
 
 

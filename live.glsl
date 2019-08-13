@@ -218,62 +218,30 @@ void main () {
   uv += cnoise(uv*80)*0.0003;
 
 
-  vec3 gold = vec3(.91, 0.75, 0.34);
-  vec3 white = vec3(.91, 0.95, 0.94);
-  vec3 black = vec3(.01, 0.05, 0.04);
+  draw(vec3(221.,223.,211.)/256., 1.);
 
-  draw(black, 1);
-  draw(white, S(.9,1.0,sin(uv.x*200))
-       * S(.82,.81,ngon(uv, vec2(0.), 4)));
+  vec2 suv = uv;
+
+  uv.y *= cos(uv.x*1.0);
+  uv.y *= cos(uv.x*1.0);
+  // uv.y *= cos(uv.x*1.0);
+  uv.y *= 2.4;
 
 
-  // coolline(black, uv, vec2(.1,.3), vec2(-.5,.7), .01);
-  // coolarc(black, (uv +vec2(-.34,.5))*rotate(4.2), vec2(-.9,.3), vec2(.25,.20), .3, .001, .01);
+  draw(vec3(0.1,0.2,.6), S(-.5,.6,cos(uv.y*100))
+       *S(.005,.0,sdBox(uv, vec2(.7,.6)))
+       );
 
-  // coolline(white, uv, vec2(.7,.4), vec2(.1,.6),.07);
-  // coolline(black, uv, vec2(.7,.6), vec2(.3,.7),.01);
+  draw(vec3(0.,.3,.1)*.9, S(-.5,.0,cos(uv.y*100))
+       *S(.005,.0,sdBox(uv, vec2(.7,.6)))
+       *S(-.02,-.4,cos(length(suv*34.) +PI))
+       );
 
-  // coolline(white, uv, vec2(.2,-.3), vec2(-.2,-.3), .07);
+  draw(vec3(.7,.68,.6), S(.8,1.1,ngon(suv, vec2(0.), 4)));
 
-  // coolline(gold, uv, vec2(.5,.3), vec2(-.4,.35), .02);
-  // coolline(white, uv, vec2(.5,.2), vec2(-.4,.15), .01);
-  // coolline(black, uv, vec2(-.7,.2), vec2(-.4,.25), .01);
-  // coolline(black, uv, vec2(-.75,-.35), vec2(-.5,-.25), .01);
-  // coolline(gold, uv, vec2(-.2,-.7), vec2(-.7,-.7), .02);
-  // coolline(black, uv, vec2(.4,-.65), vec2(.0,-.65), .01);
-
-  // coolline(white, uv, vec2(.5,-.4), vec2(-.5,-.4), .03);
-  // coolline(white, uv, vec2(-.7,.7), vec2(-.4,.7), .015);
-  // coolline(white, uv, vec2(-.7,.6), vec2(-.45,.62), .015);
-
-  // coolarc(white, uv, vec2(-.02,.04), vec2(.07,-.02), .1, .1, .02);
-
-  // draw(white, S(.019,.01,sdArc(uv, vec2(.9,.9), normalize(vec2(1.2,2.2)), .4, .0)));
-
-  // coolarc(white, (uv +vec2(.4,.0))*rotate(.6), vec2(-1.2,.0), vec2(1.,.0), .2, .001, .07);
-
-  // coolarc(white, (uv +vec2(-.4,-.1))*rotate(.0), vec2(-1.2,.0), vec2(1.,.0), .2, .001, .07);
-
-  for(float i = -PI; i< PI; i+=.4) {
-    // coolarc(white, (uv +vec2(-.0,-.0))*rotate(.0), vec2(-.5-i,.0), vec2(1.,.0), .2, .001, .01);
-    coolline(gold, uv, vec2(sin(i),cos(i))*.2, vec2(sin(i+.1), cos(i+.1))*.6, .01);
-    // coolline(white, uv, vec2(sin(i),cos(i))*.6, vec2(sin(i+2.2), cos(i+2.2))*.6, .01);
-    // coolline(white, uv*rotate(PI), vec2(.5,max(i-1., -.7)), vec2(-.5,i), .01);
-  }
-
-  // coolline(gold, uv, vec2(.5,.0), vec2(-.5,.0), .01);
-  for(float i = -PI; i< PI; i+=.4) {
-    // coolarc(white, (uv +vec2(-.0,-.0))*rotate(.0), vec2(-.5-i,.0), vec2(1.,.0), .2, .001, .01);
-    // coolline(gold, uv, vec2(sin(i),cos(i))*.2, vec2(sin(i+.1), cos(i+.1))*.6, .01);
-    coolline(white, uv, vec2(sin(i),cos(i))*.6, vec2(sin(i+2.2), cos(i+2.2))*.6, .01);
-    // coolline(white, uv*rotate(PI), vec2(.5,max(i-1., -.7)), vec2(-.5,i), .01);
-  }
-
-  // coolarc(gold, (uv +vec2(.0,.0))*rotate(.4), vec2(-.8,.3), vec2(1.,.0), .2, .001, .01);
-
-  c += cnoise(uv*40)*0.01;
-  c += cnoise(uv*79)*0.01;
-  c += cnoise(uv*129)*0.01;
+  c += cnoise(suv*20)/90.;
+  c += cnoise(suv*80)/90.;
+  c += cnoise(suv*180)/70.;
 
 
   gl_FragColor = vec4(c, 1.);

@@ -230,17 +230,17 @@ void main () {
 
   // uv.y /= smoothstep(-.1,.9,abs(uv.x));
 
-  uv *= rotate(length(uv)*.9);
+  uv *= rotate(sin(uv*2.).x);
  
 
 
-  draw(vec3(0.1,0.3,.5), S(-.5,.6,cos(uv.y*100))
+  draw(vec3(0.4,0.2,.2), S(-.5,.6,cos(uv.y*100))
        *S(.005,.0,sdBox(uv, vec2(.7,.6)))
        );
 
-  draw(vec3(.5,.2,.1)*.9, S(-.3,.0,cos(suv.y*100))
+  draw(vec3(.2,.4,.3)*.9, S(-.3,.0,cos(uv.y*100-.3))
        *S(.0001,.0,sdBox(uv, vec2(.7,.6)))
-       *S(-.02,-.4,cos(length(uv*34.) +PI))
+       *S(-.02,-.4,sin(length(suv*34.) +PI))
        );
 
   draw(vec3(.7,.68,.6), S(.8,1.1,ngon(suv, vec2(0.), 4)));

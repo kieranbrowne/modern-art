@@ -222,19 +222,25 @@ void main () {
 
   vec2 suv = uv;
 
-  uv.y *= cos(uv.x*1.0);
-  uv.y *= cos(uv.x*1.0);
+  // uv.y -= uv.y/uv.x;
+  // uv.y *= pow(uv.x/uv.y*2.10,2);
   // uv.y *= cos(uv.x*1.0);
   uv.y *= 2.4;
+  // uv.y /= smoothstep(.0,.9,abs(uv.x));
+
+  // uv.y /= smoothstep(-.1,.9,abs(uv.x));
+
+  uv *= rotate(length(uv)*.9);
+ 
 
 
-  draw(vec3(0.1,0.2,.6), S(-.5,.6,cos(uv.y*100))
+  draw(vec3(0.1,0.3,.5), S(-.5,.6,cos(uv.y*100))
        *S(.005,.0,sdBox(uv, vec2(.7,.6)))
        );
 
-  draw(vec3(0.,.3,.1)*.9, S(-.5,.0,cos(uv.y*100))
-       *S(.005,.0,sdBox(uv, vec2(.7,.6)))
-       *S(-.02,-.4,cos(length(suv*34.) +PI))
+  draw(vec3(.5,.2,.1)*.9, S(-.3,.0,cos(suv.y*100))
+       *S(.0001,.0,sdBox(uv, vec2(.7,.6)))
+       *S(-.02,-.4,cos(length(uv*34.) +PI))
        );
 
   draw(vec3(.7,.68,.6), S(.8,1.1,ngon(suv, vec2(0.), 4)));

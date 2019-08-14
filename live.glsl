@@ -214,41 +214,12 @@ void coolarc(vec3 col, vec2 uv, vec2 sca, vec2 scb, float ra, float rb, float ou
 void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
-  uv += cnoise(uv*40)*0.0004;
-  uv += cnoise(uv*80)*0.0003;
 
+  draw(vec3(.9,.76,.4), 1.);
 
-  draw(vec3(221.,223.,211.)/256., 1.);
-
-  vec2 suv = uv;
-
-  // uv.y -= uv.y/uv.x;
-  // uv.y *= pow(uv.x/uv.y*2.10,2);
-  // uv.y *= cos(uv.x*1.0);
-  uv.y *= 2.4;
-  // uv.y /= smoothstep(.0,.9,abs(uv.x));
-
-  // uv.y /= smoothstep(-.1,.9,abs(uv.x));
-
-  uv *= rotate(sin(uv*2.).x);
- 
-
-
-  draw(vec3(0.4,0.2,.2), S(-.5,.6,cos(uv.y*100))
-       *S(.005,.0,sdBox(uv, vec2(.7,.6)))
-       );
-
-  draw(vec3(.2,.4,.3)*.9, S(-.3,.0,cos(uv.y*100-.3))
-       *S(.0001,.0,sdBox(uv, vec2(.7,.6)))
-       *S(-.02,-.4,sin(length(suv*34.) +PI))
-       );
-
-  draw(vec3(.7,.68,.6), S(.8,1.1,ngon(suv, vec2(0.), 4)));
-
-  c += cnoise(suv*20)/90.;
-  c += cnoise(suv*80)/90.;
-  c += cnoise(suv*180)/70.;
-
+  draw(vec3(1.0,.75,.86), S(.15,.00,abs(.5- length(uv))));
+  draw(vec3(0.9,.86,.99), S(.05,.00,abs(.5- length(uv)))*.8);
+  draw(vec3(0.8,.86,.99), S(.02,.00,abs(.5- length(uv)))*.8);
 
   gl_FragColor = vec4(c, 1.);
 }

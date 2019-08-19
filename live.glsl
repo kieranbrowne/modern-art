@@ -215,11 +215,11 @@ void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
 
-  draw(normalize(vec3(.2,.26,.9)), 1.);
+  draw(normalize(vec3(cos(iGlobalTime),cos(iGlobalTime + PI)*.5,sin(iGlobalTime)))*1.1, 1.);
 
-  draw(vec3(.7,.25,.96), S(.15,.00,abs(.5- length(uv))));
-  draw(vec3(0.9,.16,.49), S(.05,.00,abs(.5- length(uv)))*.8);
-  draw(vec3(0.8,.16,.29), S(.02,.00,abs(.5- length(uv)))*.8);
+  draw(vec3(.7,.55,.96), S(.15,.00,abs(.5- length(uv))));
+  draw(vec3(0.9,.46,.99), S(.05,.00,abs(.5- length(uv)))*.8);
+  draw(vec3(0.5,.66,.99), S(.02,.00,abs(.5- length(uv)))*.8);
 
   gl_FragColor = vec4(c, 1.);
 }

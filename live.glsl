@@ -215,9 +215,9 @@ void main () {
   uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 
 
-  draw(vec3(.9,.76,.4), 1.);
+  draw(normalize(vec3(.6,.36,.9))*2.5, 1.);
 
-  draw(vec3(1.0,.75,.86), S(.15,.00,abs(.5- length(uv))));
+  draw(vec3(.7,.95,.96), S(.15,.00,abs(.5- length(uv))));
   draw(vec3(0.9,.86,.99), S(.05,.00,abs(.5- length(uv)))*.8);
   draw(vec3(0.8,.86,.99), S(.02,.00,abs(.5- length(uv)))*.8);
 

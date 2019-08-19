@@ -4,8 +4,9 @@
 
 (shader/start
  "./live.glsl"
- :width 1080 :height 1080
+ :width 680 :height 680
  :display-sync-hz 60
  )
 
 (shader/stop)
+

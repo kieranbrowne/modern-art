@@ -1,13 +1,17 @@
 #define S(a,b,x) smoothstep(a,b,x)
-#define PI 3.14159265359
+
+float t = iGlobalTime;
+
 mat2 rotate(float theta) {
   return mat2(cos(theta), -sin(theta),sin(theta),cos(theta));
 }
 
+mat2 identity = mat2(1.,0.,0.,1.);
+
 // pixel pos
-vec2 uv;
+vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 // background color
-vec3 c = vec3(235.,231.,222.)/259;
+vec3 c = vec3(.99,.9,.8);
 
 //c.yx *= rotate(1.);
 
@@ -112,38 +116,6 @@ float sdBox( in vec2 p, in vec2 b )
   vec2 d = abs(p)-b;
   return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);
 }
-float sdArc( in vec2 p, in vec2 sca, in vec2 scb, in float ra, float rb )
-{
-  p *= mat2(sca.x,sca.y,-sca.y,sca.x);
-  p.x = abs(p.x);
-  float k = (scb.y*p.x>scb.x*p.y) ? dot(p.xy,scb) : length(p.xy);
-  return sqrt( dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
-}
-float line( in vec2 p, in vec2 a, in vec2 b )
-{
-  vec2 pa = p-a, ba = b-a;
-  float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
-  return length( pa - ba*h );
-}
-float triangle( in vec2 p, in vec2 p0, in vec2 p1, in vec2 p2 )
-{
-  vec2 e0 = p1-p0, e1 = p2-p1, e2 = p0-p2;
-  vec2 v0 = p -p0, v1 = p -p1, v2 = p -p2;
-  vec2 pq0 = v0 - e0*clamp( dot(v0,e0)/dot(e0,e0), 0.0, 1.0 );
-  vec2 pq1 = v1 - e1*clamp( dot(v1,e1)/dot(e1,e1), 0.0, 1.0 );
-  vec2 pq2 = v2 - e2*clamp( dot(v2,e2)/dot(e2,e2), 0.0, 1.0 );
-  float s = sign( e0.x*e2.y - e0.y*e2.x );
-  vec2 d = min(min(vec2(dot(pq0,pq0), s*(v0.x*e0.y-v0.y*e0.x)),
-                   vec2(dot(pq1,pq1), s*(v1.x*e1.y-v1.y*e1.x))),
-               vec2(dot(pq2,pq2), s*(v2.x*e2.y-v2.y*e2.x)));
-  return -sqrt(d.x)*sign(d.y);
-}
-
-float stripedtriangle(vec2 p, vec2 p0, vec2 p1, vec2 p2) {
-  return S(.003,.00, triangle(p,p0, p1, p2))
-    *S(.1,1., sin(uv.x*640. +1.9))
-    +S(.003,.00, abs(triangle(p,p0, p1, p2)));
-}
 
 
 void draw(vec3 color, float norm) {
@@ -151,75 +123,68 @@ void draw(vec3 color, float norm) {
 }
 
 
-float hexDist(vec2 uv) {
-  return
-       max(dot(abs(uv), normalize(vec2(1.,sqrt(3)))),
-           abs(uv).x);
-}
-
-
-vec4 hexCoords(vec2 uv) {
-  vec2 rep = vec2(1.,sqrt(3.));
-  vec2 h = rep*.5;
-  vec2 a = mod(uv*5, rep) -h;
-  vec2 b = mod(uv*5-h, rep) -h;
-  vec2 gv;
-  if(length(a) < length(b))
-    gv = a;
-  else gv = b;
-
-  vec2 id = uv*5-gv;
-
-  return vec4(gv.x,gv.y,id.x,id.y);
-}
-
-
-void coolline(vec3 col, vec2 uv, vec2 a, vec2 b, float outline) {
-  float warp = 0.;
-  // warp += cnoise(uv)*.02;
-  warp += cnoise(uv*3)*.02;
-  warp += cnoise(uv*2)*.02;
-  warp += cnoise(uv*5)*.02;
-  // warp += cnoise(uv*9)*.01;
-  warp += cnoise(uv*29)*.004;
-  warp += cnoise(uv*49)*.001;
-  warp += cnoise(uv*149)*.0008;
-  warp += cnoise(uv*189)*.0003;
-
-  draw(vec3(.01, 0.05, 0.04),
-       S(outline+.03,outline,line(uv+warp +cnoise(uv*100)/120., a, b)));
-  draw(col,
-       S(.004,.0,line(uv+warp, a, b)));
-}
-void coolarc(vec3 col, vec2 uv, vec2 sca, vec2 scb, float ra, float rb, float outline) {
-  float warp = 0.;
-  // warp += cnoise(uv)*.02;
-  warp += cnoise(uv*3)*.02;
-  warp += cnoise(uv*2)*.02;
-  warp += cnoise(uv*5)*.02;
-  // warp += cnoise(uv*9)*.01;
-  warp += cnoise(uv*29)*.004;
-  warp += cnoise(uv*49)*.001;
-  warp += cnoise(uv*149)*.0008;
-  warp += cnoise(uv*189)*.0003;
-
-  draw(vec3(.01, 0.05, 0.04),
-       S(outline+.03,outline,
-         sdArc(uv+warp +cnoise(uv*100)/120., sca, scb, ra, rb)));
-  draw(col,
-       S(.004,.0,sdArc(uv+warp, sca, scb, ra,rb)));
-}
-
-
 void main () {
-  uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
+
+  float end = 624;
+  t += -25;
 
 
-  draw(normalize(vec3(cos(iGlobalTime),cos(iGlobalTime + PI)*.5,sin(iGlobalTime)))*1.1, 1.);
+  draw(vec3(.11),smoothstep(.0,0.,length(uv)));
 
-  draw(vec3(.7,.55,.96), S(.15,.00,abs(.5- length(uv))));
-  draw(vec3(0.9,.46,.99), S(.05,.00,abs(.5- length(uv)))*.8);
-  draw(vec3(0.5,.66,.99), S(.02,.00,abs(.5- length(uv)))*.8);
+  vec2 suv = uv;
+
+  float p = 1.05 * S(50.,80.,t);
+  float d = 2.19;
+
+  // if(uv.y<=0.)
+  //   suv.y+= min(.80,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),vec2(p,-p),4))/d;
+
+  // else if(uv.y>0.)
+  //   suv.y-= min(.80,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),vec2(p,-p),4))/d;
+
+
+  suv *= (identity*S(290.,269.,t) + rotate(-t/100.) *S(269.,290., t));
+  suv = -abs(suv);
+  // suv *= rotate(iGlobalTime/90.);
+
+  suv *= (identity*S(169.,90.,t) + rotate(t/190.) *S(90.,179., t));
+  // suv += cnoise(uv)/sin(iGlobalTime/20)/20.;
+  // suv *= (rotate(iGlobalTime/190.) );
+  // suv.y += min(fract(uv.x+iGlobalTime/40.), 1-fract(uv.x+iGlobalTime/40.))/2. * S(300.,320,t);
+
+  suv.y+= min(.8,ngon(suv*vec2(d,1.)*rotate(3.1415*.75 +t/10),vec2(sin(t/20),0),4))/d*S(200.,240.,t);
+
+  suv.y+= min(.8,ngon(suv*vec2(d,1.)*rotate(3.1415*.75),-vec2(p,-p),4))/d*S(19.,40.,t);
+
+
+
+
+  // else if(uv.y>0.)
+  //   suv.y-= min(.8,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),-vec2(p,-p),4))/d;
+
+
+
+  // suv+= cnoise(uv*40.)/920.;
+  // suv+= cnoise(uv*90.)/720.;
+
+
+  // uv.y+= pow(min(.4,ngon(uv,vec2(-0.2,-.8),90))*1.,2.);
+  // uv.y+= pow(min(.4,ngon(uv,vec2(0.4,.1),90))*1.,2.);
+
+  draw(vec3(.99),smoothstep(.7,1.,cos(suv.y*120. + t/4.*0.))
+       *smoothstep(.04*S(1.,3.,t),.0,-1.*S(5.,17.,t)*S(end+7.,end,t)+abs(suv.y))
+
+       );
+
+  c += cnoise(suv*vec2(1.,19.)*19. +t/4)/3.;
+
+  c += cnoise(suv*vec2(1.,4.)*99. +t/2)/4.;
+
+
+
+  draw(vec3(0.), S(3.,0., t));
+  draw(vec3(0.), S(end,end+10., t));
+
 
   gl_FragColor = vec4(c, 1.);
 }

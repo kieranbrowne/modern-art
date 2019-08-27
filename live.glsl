@@ -123,31 +123,53 @@ float sdBox( in vec2 uv, in vec2 box )
 void draw(vec3 color, float norm) {
   c = mix(c, color, max(0.,norm));
 }
+void add(vec3 color, float norm) {
+  c += mix(vec3(0.), color, max(0.,norm));
+}
+void sub(vec3 color, float norm) {
+  c -= mix(vec3(0.), 1.-color, max(0.,norm));
+}
 
 
 void main () {
 
 
-  vec2 gv = fract(uv*8)/11;
-  vec2 gi = floor(uv*8);
-
-  draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
-            sin((-uv.x+uv.y)*1.5)*.04+.9,
-            sin((-uv.x+uv.y)*2. + PI)*.04+.9
-            ) ,1.);
-
-  uv/=(2.9-uv.x);
 
 
-  gv*=rotate(length(gv)*1.);
-  gv*=rotate(length(gi/8.));
+
+  // uv += ngon(uv, vec2(0.), 4) * sign(uv);
+  // uv *= ngon(fract(uv*rotate(PI*.75)), vec2(sin(t)*.2,0.0), 3) * sign(uv);
+  // uv *= rotate(length(fract(uv*10.)));
+  // uv.y += max(fract(uv.x*15.), 1.-fract(uv.x*15.))/10.;
+
+
+
+  // uv += cnoise(uv*9. + vec2(sin(9/20.),cos(9/20.))*20.)/39.3;
+  // uv += noise(uv*rotate(1))/199.3;
+  // uv += cnoise(uv*1. + t/10.*8.)/9.3;
 
 
 
   mat2 r = rotate(PI*.245);
-  draw(vec3(.2,.5,.92),smoothstep(.004,0.,sdBox((gv+vec2(0.00,0.))*r, vec2(.002,2.6))));
-  draw(vec3(.9,.1,.2),smoothstep(.004,0.,sdBox((gv+vec2(0.00,.008))*r, vec2(.002,2.6))));
-  draw(vec3(.96,.9,.2),smoothstep(.004,0.,sdBox((gv+vec2(0.00,.016))*r, vec2(.002,2.6))));
+  draw(vec3(0.),1.);
+  draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
+            sin((-uv.x+uv.y)*1.5)*.04+.9,
+            sin((-uv.x+uv.y)*2. + PI)*.04+.9
+            ) ,1.);
+  // draw(vec3(.0),smoothstep(.02,0.,abs(.42-length(uv))));
+  // draw(vec3(0.),smoothstep(.02,0.,abs(.44-length(uv))));
+  sub(vec3(.9,.1,.2)*1.2,smoothstep(.090,0.01,abs(.49-length(uv))));
+  sub(vec3(.96,.9,.2)*1.1,smoothstep(.190,0.2,abs(.54-length(uv))));
+  sub(vec3(.2,.5,.92)*1.3,smoothstep(.090,0.1, abs(.4-length(uv))));
+  draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
+            sin((-uv.x+uv.y)*1.5)*.04+.9,
+            sin((-uv.x+uv.y)*2. + PI)*.04+.9
+            ) ,smoothstep(.6,.61,length(uv)));
+
+  draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
+            sin((-uv.x+uv.y)*1.5)*.04+.9,
+            sin((-uv.x+uv.y)*2. + PI)*.04+.9
+            ) ,smoothstep(.32,.31,length(uv)));
 
 
 

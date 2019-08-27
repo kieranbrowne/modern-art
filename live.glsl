@@ -147,7 +147,7 @@ void main () {
 
 
 
-  // uv += cnoise(uv*89. + vec2(sin(9/20.),cos(9/20.))*120.)/2129.3;
+  uv += cnoise(uv*89. + vec2(sin(9/20.),cos(9/20.))*120.)/1129.3;
   // uv += noise(uv*rotate(1))/199.3;
   // uv += cnoise(uv*1. + t/10.*8.)/9.3;
 
@@ -162,9 +162,9 @@ void main () {
   // draw(vec3(.0),smoothstep(.02,0.,abs(.42-length(uv))));
   // draw(vec3(0.),smoothstep(.02,0.,abs(.44-length(uv))));
   // mult(vec3(.96,.9,.2)*1.1,smoothstep(.90,0.1,abs(.54-length(uv))));
-  sub(vec3(.4,.7,1.),smoothstep(.3,0.0, abs(sin(length(uv)*79))));
-  sub(vec3(1.0,1.0,.0),smoothstep(.3,0.0, abs(sin(length(uv)*79 +.8))));
-  sub(vec3(1.0,.3,.4),smoothstep(.3,0.0, abs(sin(length(uv)*79 +1.8))));
+  sub(vec3(.4,.7,1.),smoothstep(1.0,-0.0, abs(sin(length(uv)*19))));
+  sub(vec3(1.0,1.0,.0),smoothstep(1.0,-0.0, abs(sin(length(uv)*49 +.8))));
+  sub(vec3(1.0,.3,.4),smoothstep(1.0,-0.0, abs(sin(length(uv)*79 +1.8))));
 
   draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
             sin((-uv.x+uv.y)*1.5)*.04+.9,

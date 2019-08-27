@@ -127,16 +127,27 @@ void draw(vec3 color, float norm) {
 
 void main () {
 
+
+  vec2 gv = fract(uv*8)/11;
+  vec2 gi = floor(uv*8);
+
   draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
             sin((-uv.x+uv.y)*1.5)*.04+.9,
             sin((-uv.x+uv.y)*2. + PI)*.04+.9
             ) ,1.);
 
   uv/=(2.9-uv.x);
+
+
+  gv*=rotate(length(gv)*1.);
+  gv*=rotate(length(gi/8.));
+
+
+
   mat2 r = rotate(PI*.245);
-  draw(vec3(.2,.4,.82),smoothstep(.002,0.,sdBox((uv+vec2(0.00,0.))*r, vec2(.002,2.6))));
-  draw(vec3(.96,.7,.2),smoothstep(.002,0.,sdBox((uv+vec2(0.00,.008))*r, vec2(.002,2.6))));
-  draw(vec3(.86,.2,.2),smoothstep(.002,0.,sdBox((uv+vec2(0.00,.016))*r, vec2(.002,2.6))));
+  draw(vec3(.2,.5,.92),smoothstep(.004,0.,sdBox((gv+vec2(0.00,0.))*r, vec2(.002,2.6))));
+  draw(vec3(.9,.1,.2),smoothstep(.004,0.,sdBox((gv+vec2(0.00,.008))*r, vec2(.002,2.6))));
+  draw(vec3(.96,.9,.2),smoothstep(.004,0.,sdBox((gv+vec2(0.00,.016))*r, vec2(.002,2.6))));
 
 
 

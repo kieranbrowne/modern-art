@@ -1,6 +1,8 @@
 #define S(a,b,x) smoothstep(a,b,x)
+#define PI 3.1415
 
 float t = iGlobalTime;
+
 
 mat2 rotate(float theta) {
   return mat2(cos(theta), -sin(theta),sin(theta),cos(theta));
@@ -111,9 +113,9 @@ float smin( float a, float b, float k )
 //   return pow( (a*b)/(a+b), 1.0/k );
 // }
 
-float sdBox( in vec2 p, in vec2 b )
+float sdBox( in vec2 uv, in vec2 box )
 {
-  vec2 d = abs(p)-b;
+  vec2 d = abs(uv)-box;
   return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);
 }
 
@@ -125,65 +127,17 @@ void draw(vec3 color, float norm) {
 
 void main () {
 
-  float end = 624;
-  t += -25;
+  draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
+            sin((-uv.x+uv.y)*1.5)*.04+.9,
+            sin((-uv.x+uv.y)*2. + PI)*.04+.9
+            ) ,1.);
 
+  uv/=(2.9-uv.x);
+  mat2 r = rotate(PI*.245);
+  draw(vec3(.2,.4,.82),smoothstep(.002,0.,sdBox((uv+vec2(0.00,0.))*r, vec2(.002,2.6))));
+  draw(vec3(.96,.7,.2),smoothstep(.002,0.,sdBox((uv+vec2(0.00,.008))*r, vec2(.002,2.6))));
+  draw(vec3(.86,.2,.2),smoothstep(.002,0.,sdBox((uv+vec2(0.00,.016))*r, vec2(.002,2.6))));
 
-  draw(vec3(.11),smoothstep(.0,0.,length(uv)));
-
-  vec2 suv = uv;
-
-  float p = 1.05 * S(50.,80.,t);
-  float d = 2.19;
-
-  // if(uv.y<=0.)
-  //   suv.y+= min(.80,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),vec2(p,-p),4))/d;
-
-  // else if(uv.y>0.)
-  //   suv.y-= min(.80,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),vec2(p,-p),4))/d;
-
-
-  suv *= (identity*S(290.,269.,t) + rotate(-t/100.) *S(269.,290., t));
-  suv = -abs(suv);
-  // suv *= rotate(iGlobalTime/90.);
-
-  suv *= (identity*S(169.,90.,t) + rotate(t/190.) *S(90.,179., t));
-  // suv += cnoise(uv)/sin(iGlobalTime/20)/20.;
-  // suv *= (rotate(iGlobalTime/190.) );
-  // suv.y += min(fract(uv.x+iGlobalTime/40.), 1-fract(uv.x+iGlobalTime/40.))/2. * S(300.,320,t);
-
-  suv.y+= min(.8,ngon(suv*vec2(d,1.)*rotate(3.1415*.75 +t/10),vec2(sin(t/20),0),4))/d*S(200.,240.,t);
-
-  suv.y+= min(.8,ngon(suv*vec2(d,1.)*rotate(3.1415*.75),-vec2(p,-p),4))/d*S(19.,40.,t);
-
-
-
-
-  // else if(uv.y>0.)
-  //   suv.y-= min(.8,ngon(uv*vec2(2.1,1.)*rotate(3.1415*.75),-vec2(p,-p),4))/d;
-
-
-
-  // suv+= cnoise(uv*40.)/920.;
-  // suv+= cnoise(uv*90.)/720.;
-
-
-  // uv.y+= pow(min(.4,ngon(uv,vec2(-0.2,-.8),90))*1.,2.);
-  // uv.y+= pow(min(.4,ngon(uv,vec2(0.4,.1),90))*1.,2.);
-
-  draw(vec3(.99),smoothstep(.7,1.,cos(suv.y*120. + t/4.*0.))
-       *smoothstep(.04*S(1.,3.,t),.0,-1.*S(5.,17.,t)*S(end+7.,end,t)+abs(suv.y))
-
-       );
-
-  c += cnoise(suv*vec2(1.,19.)*19. +t/4)/3.;
-
-  c += cnoise(suv*vec2(1.,4.)*99. +t/2)/4.;
-
-
-
-  draw(vec3(0.), S(3.,0., t));
-  draw(vec3(0.), S(end,end+10., t));
 
 
   gl_FragColor = vec4(c, 1.);

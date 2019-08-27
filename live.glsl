@@ -152,15 +152,13 @@ void main () {
 
   mat2 r = rotate(PI*.245);
   draw(vec3(0.),1.);
-  draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
-            sin((-uv.x+uv.y)*1.5)*.04+.9,
-            sin((-uv.x+uv.y)*2. + PI)*.04+.9
-            ) ,1.);
+  // draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
+  //           sin((-uv.x+uv.y)*1.5)*.04+.9,
+  //           sin((-uv.x+uv.y)*2. + PI)*.04+.9
+  //           ) ,1.);
   // draw(vec3(.0),smoothstep(.02,0.,abs(.42-length(uv))));
   // draw(vec3(0.),smoothstep(.02,0.,abs(.44-length(uv))));
-  sub(vec3(.9,.1,.2)*1.2,smoothstep(.090,0.01,abs(.49-length(uv))));
-  sub(vec3(.96,.9,.2)*1.1,smoothstep(.190,0.2,abs(.54-length(uv))));
-  sub(vec3(.2,.5,.92)*1.3,smoothstep(.090,0.1, abs(.4-length(uv))));
+  add(vec3(.96,.9,.2)*1.1,smoothstep(.90,0.1,abs(.54-length(uv))));
   draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
             sin((-uv.x+uv.y)*1.5)*.04+.9,
             sin((-uv.x+uv.y)*2. + PI)*.04+.9
@@ -170,6 +168,10 @@ void main () {
             sin((-uv.x+uv.y)*1.5)*.04+.9,
             sin((-uv.x+uv.y)*2. + PI)*.04+.9
             ) ,smoothstep(.32,.31,length(uv)));
+
+  // draw(vec3(.9,.1,.2)*1.2,smoothstep(.019,0.01,abs(.31-length(uv))));
+
+  // draw(vec3(.2,.5,.92)*1.3,smoothstep(.110,0.1, abs(.9-length(uv))));
 
 
 

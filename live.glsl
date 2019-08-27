@@ -129,6 +129,9 @@ void add(vec3 color, float norm) {
 void sub(vec3 color, float norm) {
   c -= mix(vec3(0.), 1.-color, max(0.,norm));
 }
+void mult(vec3 color, float norm) {
+  c *= mix(vec3(1.), color, min(1.,max(0.,norm)));
+}
 
 
 void main () {
@@ -144,21 +147,25 @@ void main () {
 
 
 
-  // uv += cnoise(uv*9. + vec2(sin(9/20.),cos(9/20.))*20.)/39.3;
+  // uv += cnoise(uv*89. + vec2(sin(9/20.),cos(9/20.))*120.)/2129.3;
   // uv += noise(uv*rotate(1))/199.3;
   // uv += cnoise(uv*1. + t/10.*8.)/9.3;
 
 
 
   mat2 r = rotate(PI*.245);
-  draw(vec3(0.),1.);
+  // draw(vec3(0.),1.);
   // draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
   //           sin((-uv.x+uv.y)*1.5)*.04+.9,
   //           sin((-uv.x+uv.y)*2. + PI)*.04+.9
   //           ) ,1.);
   // draw(vec3(.0),smoothstep(.02,0.,abs(.42-length(uv))));
   // draw(vec3(0.),smoothstep(.02,0.,abs(.44-length(uv))));
-  add(vec3(.96,.9,.2)*1.1,smoothstep(.90,0.1,abs(.54-length(uv))));
+  // mult(vec3(.96,.9,.2)*1.1,smoothstep(.90,0.1,abs(.54-length(uv))));
+  sub(vec3(.4,.7,1.),smoothstep(.3,0.0, abs(sin(length(uv)*79))));
+  sub(vec3(1.0,1.0,.0),smoothstep(.3,0.0, abs(sin(length(uv)*79 +.8))));
+  sub(vec3(1.0,.3,.4),smoothstep(.3,0.0, abs(sin(length(uv)*79 +1.8))));
+
   draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
             sin((-uv.x+uv.y)*1.5)*.04+.9,
             sin((-uv.x+uv.y)*2. + PI)*.04+.9
@@ -171,7 +178,6 @@ void main () {
 
   // draw(vec3(.9,.1,.2)*1.2,smoothstep(.019,0.01,abs(.31-length(uv))));
 
-  // draw(vec3(.2,.5,.92)*1.3,smoothstep(.110,0.1, abs(.9-length(uv))));
 
 
 

@@ -155,7 +155,7 @@ void main () {
 
 
 
-  draw(vec3(.25,.22,.32),1.);
+  draw(vec3(sin(uv.x*3. -uv.y*3)*.5+.5),1.);
 
   // add(vec3(1.,.2,.4),invsq(.04+line(uv,vec2(0. ,.2),vec2(0.) ))*.02);
   // add(vec3(.1,.4,.9),invsq(.2+ngon(uv,vec2(0., sin(t*1.1)*.2), 2))*.09);
@@ -163,10 +163,11 @@ void main () {
 
   // uv = vec2(pow(uv.x,2.), pow(uv.y,2.));
 
-  // uv += S(.0,.0,sdBox(uv,vec2(.8,.5))*.012);
+  uv += S(.0,.0,sdBox(uv,vec2(.7,.7))*.012);
 
   // uv += S(.00001,.0,sdBox(uv,vec2(.8,.5))*.012);
-  uv += S(.00001,.0,sdBox(uv,vec2(.1,.9)))*.09;
+  // uv += S(.00001,.0,sdBox(uv,vec2(.9,.9)))*.09;
+  // uv += cnoise(uv) * S(.00001,.0,sdBox(uv,vec2(.3,.9)));
 
   vec2 gv = fract(uv*5);
   vec2 gi = floor(uv*5);
@@ -176,18 +177,19 @@ void main () {
 
   gv -=.5;
 
-  draw(vec3(0.3,.2,.6)*.5, S(.25,.22,length(gv-vec2(-.12))));
-  draw(vec3(.9),
-       S(.25,.22,length(gv))
-       *S(.00,.10,(gv*rotate(gi.x*0.453 + gi.y*0.00)).x)
-       );
+  draw(vec3(cos(uv.x*3. -uv.y*3.)*.5+.5), S(.25,.22,length(gv-vec2(-.12))));
+  draw(vec3(cos(uv.x*5. + PI)*.5+.5), S(.05,.02,abs(.3-length(gv-vec2(-.12)))));
+  // draw(vec3(.0),
+  //      S(.25,.22,length(gv))
+  //      *S(.00,.10,(gv*rotate(gi.x*0.453 + gi.y*0.00)).x)
+  //      );
   // draw(vec3(.2,.5,.1),
   //      S(.25,.22,length(gv))
   //      *S(.10,.09,(gv*rotate(gi.x*4.453 + gi.y*1.24)).x)
   //      );
-  draw(vec3(.2,.3,.7),
+  draw(vec3(.9),
        S(.25,.22,length(gv))
-       *S(-.09,-.19,(gv*rotate(gi.x*0.453 + gi.y*1.24*0.)).x)
+       *S(-.09,-.19,(gv*rotate(uv.x*3.453 + uv.y*9.24)).x)
        );
 
 

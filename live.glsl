@@ -113,6 +113,12 @@ float smin( float a, float b, float k )
 //   return pow( (a*b)/(a+b), 1.0/k );
 // }
 
+float line( in vec2 p, in vec2 a, in vec2 b ) {
+  vec2 pa = p-a, ba = b-a;
+  float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
+  return length( pa - ba*h );
+}
+
 float sdBox( in vec2 uv, in vec2 box )
 {
   vec2 d = abs(uv)-box;
@@ -121,7 +127,7 @@ float sdBox( in vec2 uv, in vec2 box )
 
 
 void draw(vec3 color, float norm) {
-  c = mix(c, color, max(0.,norm));
+  c = mix(c, color, min(1.,max(0.,norm)));
 }
 void add(vec3 color, float norm) {
   c += mix(vec3(0.), color, max(0.,norm));
@@ -133,50 +139,42 @@ void mult(vec3 color, float norm) {
   c *= mix(vec3(1.), color, min(1.,max(0.,norm)));
 }
 
+float invsq(float x) {
+  return 1/pow(x,2.);
+}
+
+float bler(vec2 uv) {
+  return S(-.01,.01,
+    sin(uv.x*100.)
+    *sin(uv.y*100./3)
+           );
+}
 
 void main () {
 
 
 
 
+  draw(vec3(.7,.2,.2),1.);
 
-  // uv += ngon(uv, vec2(0.), 4) * sign(uv);
-  // uv *= ngon(fract(uv*rotate(PI*.75)), vec2(sin(t)*.2,0.0), 3) * sign(uv);
-  // uv *= rotate(length(fract(uv*10.)));
-  // uv.y += max(fract(uv.x*15.), 1.-fract(uv.x*15.))/10.;
+  // add(vec3(1.,.2,.4),invsq(.04+line(uv,vec2(0. ,.2),vec2(0.) ))*.02);
+  // add(vec3(.1,.4,.9),invsq(.2+ngon(uv,vec2(0., sin(t*1.1)*.2), 2))*.09);
+  // add(vec3(.1,.4,.9),invsq(distance(uv,vec2(sin(t)/2.)))*.01);
 
+  // uv = vec2(pow(uv.x,2.), pow(uv.y,2.));
 
+  vec2 gv = fract(uv*5);
+  vec2 gi = floor(uv*5);
 
-  uv += cnoise(uv*89. + vec2(sin(9/20.),cos(9/20.))*120.)/1129.3;
-  // uv += noise(uv*rotate(1))/199.3;
-  // uv += cnoise(uv*1. + t/10.*8.)/9.3;
+  gv -=.5;
 
+  draw(vec3(0.3,.2,.6), S(.25,.22,length(gv-vec2(-.12))));
+  draw(vec3(1.),
+       S(.25,.22,length(gv))
+       *S(.05,.22,(gv*rotate(gi.x)).x)
 
+       );
 
-  mat2 r = rotate(PI*.245);
-  // draw(vec3(0.),1.);
-  // draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
-  //           sin((-uv.x+uv.y)*1.5)*.04+.9,
-  //           sin((-uv.x+uv.y)*2. + PI)*.04+.9
-  //           ) ,1.);
-  // draw(vec3(.0),smoothstep(.02,0.,abs(.42-length(uv))));
-  // draw(vec3(0.),smoothstep(.02,0.,abs(.44-length(uv))));
-  // mult(vec3(.96,.9,.2)*1.1,smoothstep(.90,0.1,abs(.54-length(uv))));
-  sub(vec3(.4,.7,1.),smoothstep(1.0,-0.0, abs(sin(length(uv)*19))));
-  // sub(vec3(1.0,1.0,.0),smoothstep(1.0,-0.0, abs(sin(length(uv)*49 +.8))));
-  // sub(vec3(1.0,.3,.4),smoothstep(1.0,-0.0, abs(sin(length(uv)*79 +1.8))));
-
-  draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
-            sin((-uv.x+uv.y)*1.5)*.04+.9,
-            sin((-uv.x+uv.y)*2. + PI)*.04+.9
-            ) ,smoothstep(.6,.61,length(uv)));
-
-  draw(vec3(sin((-uv.x+uv.y)*2.5)*.04+.9,
-            sin((-uv.x+uv.y)*1.5)*.04+.9,
-            sin((-uv.x+uv.y)*2. + PI)*.04+.9
-            ) ,smoothstep(.32,.31,length(uv)));
-
-  // draw(vec3(.9,.1,.2)*1.2,smoothstep(.019,0.01,abs(.31-length(uv))));
 
 
 

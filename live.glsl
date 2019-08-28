@@ -169,10 +169,13 @@ void main () {
   gv -=.5;
 
   draw(vec3(0.3,.2,.6), S(.25,.22,length(gv-vec2(-.12))));
-  draw(vec3(1.),
+  draw(vec3(1.,.4,.6),
        S(.25,.22,length(gv))
-       *S(.05,.22,(gv*rotate(gi.x)).x)
-
+       *S(.05,.10,(gv*rotate(gi.x*4.453 + gi.y*1.24)).x)
+       );
+  draw(vec3(.2,.6,.1),
+       S(.25,.22,length(gv))
+       *S(.10,-.12,(gv*rotate(gi.x*4.453 + gi.y*1.24)).x)
        );
 
 

@@ -152,20 +152,30 @@ float bler(vec2 uv) {
 
 void main () {
 
-
-  for(float i=-.9; i <= .9; i+=.08 +abs(sin(i*292.))/18.)
-
-  draw(vec3(.2,.2,.5),
-       S(.042,.04,line(uv/vec2(1.,2.) -vec2(i,0.) +cnoise(uv*vec2(60.,1.))*0.002 +cnoise(uv*vec2(30.,1.))*0.005,vec2(0.0,.43), vec2(0,-1.2)))
-       * pow((.5+uv.y/2.),2.)
-       *((.5+uv.y/2.)*2.-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
-       *((.5+uv.y/2.)*2.-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
-       *(.8-cnoise(uv*vec2(9.))*.2)
-       *(.8-cnoise(uv*vec2(99.))*.2)
-       // *(S(.9,.79,uv.y)-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
-       );
-
   draw(vec3(.8,.7,.6), S(.9,1.1, ngon(uv,vec2(0.),4)));
+  vec2 suv = uv;
+  // uv.y += 0.4;
+  suv = uv;
+
+  for(float i=-PI; i <= PI; i+=.18 +abs(sin(i*292.))/12.) {
+    uv = suv*rotate(i);
+    uv.x += pow(sin(uv.y*9. +i*14.),2.)/10.;
+    // uv.x += min(fract(uv.y*2.), 1.- fract(uv.y*2.))/99.;
+
+    draw(vec3(.1,.6,0.4)*.8,
+         S(.042,.04,line(uv/vec2(1.,2.) -vec2(.3,0.) +cnoise(uv*vec2(60.,1.))*0.002 +cnoise(uv*vec2(30.,1.))*0.005,vec2(0.0,.43), vec2(0,-.0)))
+         * pow((.5+uv.y/2.),9.)
+         *((.5+uv.y/2.)*2.-cnoise((uv+i*2.)*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
+         *((.5+uv.y/2.)*2.-cnoise((uv+i*2.)*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
+         *(.8-cnoise(uv*vec2(9.))*.2)
+         *(.8-cnoise(uv*vec2(99.))*.2)
+         // *(S(.9,.79,uv.y)-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
+         );
+  }
+
+
+  uv = suv;
+
 
   c += cnoise(uv*70)/90;
   c += cnoise(uv*190)/40;

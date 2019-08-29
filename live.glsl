@@ -13,7 +13,7 @@ mat2 identity = mat2(1.,0.,0.,1.);
 // pixel pos
 vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 // background color
-vec3 c = vec3(.99,.9,.8);
+vec3 c = vec3(.96,.86,.65)*.96;
 
 //c.yx *= rotate(1.);
 
@@ -153,44 +153,23 @@ float bler(vec2 uv) {
 void main () {
 
 
+  for(float i=-.9; i <= .9; i+=.08 +abs(sin(i*292.))/18.)
 
-
-  draw(vec3(.8,.7,.8),1.);
-
-  // add(vec3(1.,.2,.4),invsq(.04+line(uv,vec2(0. ,.2),vec2(0.) ))*.02);
-  // add(vec3(.1,.4,.9),invsq(.2+ngon(uv,vec2(0., sin(t*1.1)*.2), 2))*.09);
-  // add(vec3(.1,.4,.9),invsq(distance(uv,vec2(sin(t)/2.)))*.01);
-
-  // uv = vec2(pow(uv.x,2.), pow(uv.y,2.));
-
-  // uv += S(.0,.0,sdBox(uv,vec2(.7,.7))*.012);
-
-  // uv += S(.00001,.0,sdBox(uv,vec2(.8,.5))*.012);
-  uv += S(.00001,.0,sdBox(sin(uv*4.),vec2(.2,.2)))*.09;
-  // uv += cnoise(uv) * S(.00001,.0,sdBox(uv,vec2(.3,.9)));
-
-  vec2 gv = fract(uv*5);
-  vec2 gi = floor(uv*5);
-
-
-
-
-  gv -=.5;
-
-  draw(vec3(.5,.3,.2), S(.25,.22,length(gv-vec2(-.12))));
-  // draw(vec3(cos(uv.x*5. + PI)*.5+.5), S(.05,.02,abs(.3-length(gv-vec2(-.12)))));
-  draw(vec3(.4,.3,.3),
-       S(.25,.22,length(gv))
-       *S(.00,.10,(gv*rotate(gi.x*0.453 + gi.y*0.00)).x)
+  draw(vec3(.2,.2,.5),
+       S(.042,.04,line(uv/vec2(1.,2.) -vec2(i,0.) +cnoise(uv*vec2(60.,1.))*0.002 +cnoise(uv*vec2(30.,1.))*0.005,vec2(0.0,.43), vec2(0,-1.2)))
+       * pow((.5+uv.y/2.),2.)
+       *((.5+uv.y/2.)*2.-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
+       *((.5+uv.y/2.)*2.-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
+       *(.8-cnoise(uv*vec2(9.))*.2)
+       *(.8-cnoise(uv*vec2(99.))*.2)
+       // *(S(.9,.79,uv.y)-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
        );
-  draw(vec3(.2,.1,.1),
-       S(.25,.22,length(gv))
-       *S(.10,.09,(gv*rotate(gi.x*4.453 + gi.y*1.24)).x)
-       );
-  draw(vec3(.6,.3,.8),
-       S(.25,.22,length(gv))
-       *S(-.09,-.19,(gv*rotate(uv.x*3.453 + uv.y*9.24)).x)
-       );
+
+  draw(vec3(.8,.7,.6), S(.9,1.1, ngon(uv,vec2(0.),4)));
+
+  c += cnoise(uv*70)/90;
+  c += cnoise(uv*190)/40;
+
 
 
 

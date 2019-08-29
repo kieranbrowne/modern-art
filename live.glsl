@@ -152,15 +152,11 @@ float bler(vec2 uv) {
 
 void main () {
 
-  draw(vec3(.8,.7,.6), S(.9,1.1, ngon(uv,vec2(0.),4)));
   vec2 suv = uv;
-  uv.y += 0.4;
-  suv = uv;
 
   for(float i=-.9; i <= .9; i+=.08 +abs(sin(i*292.))/18.) {
-    uv = suv*rotate(sin(-i*0.8)/1.);
-    uv.x += sin(uv.y*7. +i*01.)/90.*(2.-uv.y);
-    // uv.x += min(fract(uv.y*2.), 1.- fract(uv.y*2.))/59.;
+    uv = suv*rotate(sin(i*10.)/20.);
+    uv.x += sin(uv.y*7. +i*1129.)/20.;
 
     draw(vec3(0.1),
        S(.042,.04,line(uv/vec2(1.,2.) -vec2(i,0.) +cnoise(uv*vec2(60.,1.))*0.002 +cnoise(uv*vec2(30.,1.))*0.005,vec2(0.0,.43), vec2(0,-1.2)))
@@ -173,9 +169,9 @@ void main () {
        );
   }
 
-
   uv = suv;
 
+  draw(vec3(.8,.7,.6), S(.9,1.1, ngon(uv,vec2(0.),4)));
 
   c += cnoise(uv*70)/90;
   c += cnoise(uv*190)/40;

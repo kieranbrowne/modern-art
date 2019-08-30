@@ -13,7 +13,7 @@ mat2 identity = mat2(1.,0.,0.,1.);
 // pixel pos
 vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 // background color
-vec3 c = vec3(.96,.86,.65)*.96;
+vec3 c = vec3(.96,.94,.88)*.96;
 
 //c.yx *= rotate(1.);
 
@@ -152,33 +152,42 @@ float bler(vec2 uv) {
 
 void main () {
 
-  vec2 suv = uv;
+  vec3 bg = c;
 
-  for(float i=-.9; i <= .9; i+=.08 +abs(sin(i*292.))/18.) {
-    uv = suv*rotate(sin(i*10.)/20.);
-    uv.x += sin(uv.y*7. +i*1129.)/20.;
+  uv += cnoise(uv)/30;
+  uv += cnoise(5*uv)/130;
+  uv += cnoise(25*uv)/530;
+  uv += cnoise(105*uv)/1530;
 
-    draw(vec3(0.1),
-       S(.042,.04,line(uv/vec2(1.,2.) -vec2(i,0.) +cnoise(uv*vec2(60.,1.))*0.002 +cnoise(uv*vec2(30.,1.))*0.005,vec2(0.0,.43), vec2(0,-1.2)))
-       * pow((.5+uv.y/2.),2.)
-       *((.5+uv.y/2.)*2.-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
-       *((.5+uv.y/2.)*2.-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
-       *(.8-cnoise(uv*vec2(9.))*.2)
-       *(.8-cnoise(uv*vec2(99.))*.2)
-       // *(S(.9,.79,uv.y)-cnoise(uv*vec2(180.,1.))+cnoise(uv*vec2(190.,1.)))
+
+  draw(vec3(0.1), S(.89,.885,length(uv*vec2(1.,.8)+cnoise(uv*10)/160-vec2(0.,.40)))
+       * S(.2,.205, -uv.y+.1)
        );
-  }
+  draw(bg, S(.88,.875,length(uv*vec2(1.,.8)+cnoise(uv*10)/160-vec2(0.,.40)))
+       * S(.2,.205, -uv.y+.089)
+       );
+  // draw(bg, S(.87,.860,length(uv-vec2(0.,1.0)))
+  //      * S(.2,.21, -uv.y+.9)
+  //      );
 
-  uv = suv;
-
-  draw(vec3(.8,.7,.6), S(.9,1.1, ngon(uv,vec2(0.),4)));
-
-  c += cnoise(uv*70)/90;
-  c += cnoise(uv*190)/40;
-
-
+  draw(vec3(0.7,.1,.1), S(.89,.885,length(uv*vec2(1.,.8)-vec2(0.,.6)))
+       * S(.2,.205, -uv.y+cnoise(uv*2)/20+.3)
+       );
+  draw(vec3(0.1), S(.89,.884,length(uv*vec2(1.,.9)-vec2(0.,.8)))
+       * S(.2,.205, -uv.y+cnoise(uv*2)/50+.5)
+       );
 
 
+  draw(vec3(0.1), S(.89,.885,length(uv-vec2(0.,1.0)))
+       * S(.2,.205, -uv.y+.8)
+       );
+  draw(bg, S(.875,.869,length(uv+cnoise(uv*10)/160-vec2(0.,1.0)))
+       * S(.2,.205, -uv.y+.9)
+       );
+
+  c += cnoise(20*uv)/80;
+  c += cnoise(120*uv)/50;
+  c += cnoise(220*uv)/50;
 
 
   gl_FragColor = vec4(c, 1.);

@@ -145,12 +145,9 @@ void main () {
 
        );
 
-  draw(paper, S(.005,.0,line(uv, vec2(0.0), vec2(0.,.5))));
-  draw(paper, S(.005,.0,line(uv*rotate(PI*.25), vec2(0.0), vec2(0.,.5))));
-  draw(paper, S(.005,.0,line(uv*rotate(PI*.5), vec2(0.0), vec2(0.,.5))));
-  draw(paper, S(.005,.0,line(uv*rotate(PI), vec2(0.0), vec2(0.,.5))));
-  draw(paper, S(.005,.0,line(uv*rotate(PI*1.25), vec2(0.0), vec2(0.,.5))));
-  draw(paper, S(.005,.0,line(uv*rotate(PI*1.5), vec2(0.0), vec2(0.,.5))));
+  draw(paper, S(.005,.0,line(uv, vec2(0.0), vec2(0.,.534))));
+  draw(paper, S(.005+length(uv)/20,.0,line(uv*rotate(sin(length(uv)*.534*PI)*9), vec2(0.0), vec2(0.,.534))));
+  draw(paper, S(.005,.0,abs(.534-length(uv))));
   // draw(vec3(1.), S(.005,.0,line(uv, vec2(0.25, 0.5), vec2(0.,.0))));
   // draw(vec3(1.), S(.005,.0,line(uv, vec2(0.25, 0.5), vec2(0.,.0))));
 

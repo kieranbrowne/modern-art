@@ -1,8 +1,7 @@
 #define S(a,b,x) smoothstep(a,b,x)
-#define PI 3.1415
+#define PI 3.14159265359
 
 float t = iGlobalTime;
-
 
 mat2 rotate(float theta) {
   return mat2(cos(theta), -sin(theta),sin(theta),cos(theta));
@@ -13,7 +12,7 @@ mat2 identity = mat2(1.,0.,0.,1.);
 // pixel pos
 vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 // background color
-vec3 c = vec3(.96,.94,.88)*.96;
+vec3 c = vec3(.99,.9,.8);
 
 //c.yx *= rotate(1.);
 
@@ -29,8 +28,8 @@ float noise(vec2 p) {
 
 float ngon(vec2 uv, vec2 pos, int n) {
   uv += pos;
-  float a = atan(uv.x,uv.y)+3.145;
-  float r = 6.28/float(n);
+  float a = atan(uv.x,uv.y)+PI;
+  float r = PI*2./float(n);
   return cos(floor(.5+a/r)*r-a)*length(uv);
 }
 
@@ -113,81 +112,47 @@ float smin( float a, float b, float k )
 //   return pow( (a*b)/(a+b), 1.0/k );
 // }
 
+float sdBox( in vec2 p, in vec2 b ) {
+  vec2 d = abs(p)-b;
+  return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);
+}
+
 float line( in vec2 p, in vec2 a, in vec2 b ) {
   vec2 pa = p-a, ba = b-a;
   float h = clamp( dot(pa,ba)/dot(ba,ba), 0.0, 1.0 );
   return length( pa - ba*h );
 }
 
-float sdBox( in vec2 uv, in vec2 box )
-{
-  vec2 d = abs(uv)-box;
-  return length(max(d,vec2(0))) + min(max(d.x,d.y),0.0);
-}
-
 
 void draw(vec3 color, float norm) {
-  c = mix(c, color, min(1.,max(0.,norm)));
-}
-void add(vec3 color, float norm) {
-  c += mix(vec3(0.), color, max(0.,norm));
-}
-void sub(vec3 color, float norm) {
-  c -= mix(vec3(0.), 1.-color, max(0.,norm));
-}
-void mult(vec3 color, float norm) {
-  c *= mix(vec3(1.), color, min(1.,max(0.,norm)));
+  c = mix(c, color, max(0.,norm));
 }
 
-float invsq(float x) {
-  return 1/pow(x,2.);
-}
-
-float bler(vec2 uv) {
-  return S(-.01,.01,
-    sin(uv.x*100.)
-    *sin(uv.y*100./3)
-           );
-}
 
 void main () {
 
-  vec3 bg = c;
+  draw(vec3(0.), smoothstep(.92,.91,ngon(uv, vec2(0.),4)));
 
-  uv += cnoise(uv)/30;
-  uv += cnoise(5*uv)/130;
-  uv += cnoise(25*uv)/530;
-  uv += cnoise(105*uv)/1530;
+  vec3 paper = vec3(.99,.9,.8);
 
+  draw(paper,
+       (smoothstep(.995,1.,cos(uv.x*25.+PI))
+        +smoothstep(.995,1.,cos(uv.y*25.+PI))
+       - smoothstep(.995,1.,cos(uv.x*25.+PI))
+        *smoothstep(.995,1.,cos(uv.y*25.+PI)))
 
-  draw(vec3(0.1), S(.89,.885,length(uv*vec2(1.,.8)+cnoise(uv*10)/160-vec2(0.,.40)))
-       * S(.2,.205, -uv.y+.1)
-       );
-  draw(bg, S(.88,.875,length(uv*vec2(1.,.8)+cnoise(uv*10)/160-vec2(0.,.40)))
-       * S(.2,.205, -uv.y+.089)
-       );
-  // draw(bg, S(.87,.860,length(uv-vec2(0.,1.0)))
-  //      * S(.2,.21, -uv.y+.9)
-  //      );
+       *smoothstep(.634,.63,ngon(uv, vec2(0.),4))
 
-  draw(vec3(0.7,.1,.1), S(.89,.885,length(uv*vec2(1.,.8)-vec2(0.,.6)))
-       * S(.2,.205, -uv.y+cnoise(uv*2)/20+.3)
-       );
-  draw(vec3(0.1), S(.89,.884,length(uv*vec2(1.,.9)-vec2(0.,.8)))
-       * S(.2,.205, -uv.y+cnoise(uv*2)/50+.5)
        );
 
-
-  draw(vec3(0.1), S(.89,.885,length(uv-vec2(0.,1.0)))
-       * S(.2,.205, -uv.y+.8)
-       );
-  draw(bg, S(.875,.869,length(uv+cnoise(uv*10)/160-vec2(0.,1.0)))
-       * S(.2,.205, -uv.y+.9)
-       );
-
-  c += cnoise(20*uv)/80;
-  c += cnoise(120*uv)/50;
-  c += cnoise(220*uv)/50;
+  draw(paper, S(.005,.0,line(uv, vec2(0.0), vec2(0.,.5))));
+  draw(paper, S(.005,.0,line(uv*rotate(PI*.25), vec2(0.0), vec2(0.,.5))));
+  draw(paper, S(.005,.0,line(uv*rotate(PI*.5), vec2(0.0), vec2(0.,.5))));
+  draw(paper, S(.005,.0,line(uv*rotate(PI), vec2(0.0), vec2(0.,.5))));
+  draw(paper, S(.005,.0,line(uv*rotate(PI*1.25), vec2(0.0), vec2(0.,.5))));
+  draw(paper, S(.005,.0,line(uv*rotate(PI*1.5), vec2(0.0), vec2(0.,.5))));
+  // draw(vec3(1.), S(.005,.0,line(uv, vec2(0.25, 0.5), vec2(0.,.0))));
+  // draw(vec3(1.), S(.005,.0,line(uv, vec2(0.25, 0.5), vec2(0.,.0))));
 
 
   gl_FragColor = vec4(c, 1.);

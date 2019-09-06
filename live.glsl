@@ -140,7 +140,7 @@ void main () {
   vec3 paper = vec3(.99,.9,.8);
 
   // uv *= rotate(sin(min(length(uv),.53))/2);
-  // uv *= rotate(PI*.25);
+  uv *= rotate(PI*.25);
 
   draw(paper,
        (smoothstep(.995,1.,cos(uv.x*25.+PI))

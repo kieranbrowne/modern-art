@@ -128,10 +128,13 @@ void draw(vec3 color, float norm) {
   c = mix(c, color, max(0.,norm));
 }
 
-void thing1(vec2 off, float rot) {
-  draw(vec3(.99,.9,.8), S(.005,.0,line((uv+off)*rotate(rot), vec2(-0.125*0, -0.125*1), vec2(-.125*1.,-.125*0.))));
-}
+// void thing1(vec2 off, float rot) {
+//   draw(vec3(.99,.9,.8), S(.005,.0,line((uv+off)*rotate(rot), vec2(-0.125*0, -0.125*1), vec2(-.125*1.,-.125*0.))));
+// }
 
+void thing1(vec2 off, float rot) {
+  draw(vec3(.99,.9,.8), S(.005,.0,abs(.125-length(uv+off))));
+}
 
 void main () {
 

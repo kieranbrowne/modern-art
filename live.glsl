@@ -128,12 +128,12 @@ void draw(vec3 color, float norm) {
   c = mix(c, color, max(0.,norm));
 }
 
-// void thing1(vec2 off, float rot) {
-//   draw(vec3(.99,.9,.8), S(.005,.0,line((uv+off)*rotate(rot), vec2(-0.125*0, -0.125*1), vec2(-.125*1.,-.125*0.))));
-// }
-
 void thing1(vec2 off, float rot) {
-  draw(vec3(.99,.9,.8), S(.005,.0,abs(.175-length(uv+off))));
+  draw(vec3(.99,.9,.8), S(.005,.0,line((uv+off)*rotate(rot), vec2(-0.125*0, -0.125*1), vec2(-.125*1.,-.125*0.))));
+}
+
+void thing2(vec2 off, float rot) {
+  draw(vec3(.99,.9,.8), S(.005,.0,abs(.125-length(uv+off))));
 }
 
 void main () {
@@ -142,7 +142,7 @@ void main () {
 
   vec3 paper = vec3(.99,.9,.8);
 
-  uv.y += min(fract(uv.x*2.), 1. - fract(uv.x*2.))*.2 - .05;
+  // uv.y += min(fract(uv.x*2.), 1. - fract(uv.x*2.))*.2 - .05;
 
   // uv *= rotate(sin(min(length(uv),.53))/2);
   // uv *= rotate(PI*.25);
@@ -165,8 +165,8 @@ void main () {
       // if(fract(j*93.34092)>.8 ) {
       //   if(fract(i*93.34092)>.2 ) {
         // thing1(vec2(i,j), floor(i*j*15)*PI*.5 +PI);
-        thing1(vec2(i,j), floor(i*j*1991.39)*PI*.25 );
-        // thing1(vec2(i,j), floor(i*j*12.39)*PI*.25 +PI*.5);
+        thing1(vec2(i,j), floor(i*j*1991.39)*PI*.35 );
+        thing2(vec2(i,j), 0.);
       //   }
       // }
     }

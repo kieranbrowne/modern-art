@@ -152,9 +152,9 @@ void main () {
 
        );
 
-  for(float i =-.125*3; i<= .125*4; i+=.125) {
-    for(float j =-.125*3; j<= .125*4; j+=.125) {
-      thing1(vec2(i,j), PI);
+  for(float i =-.125*3; i<= .125*3; i+=.125) {
+    for(float j =-.125*3; j<= .125*3; j+=.125) {
+      thing1(vec2(i,j), floor(i*j*13)*PI*.5);
     }
   }
 

@@ -133,7 +133,7 @@ void draw(vec3 color, float norm) {
 // }
 
 void thing1(vec2 off, float rot) {
-  draw(vec3(.99,.9,.8), S(.005,.0,abs(.125-length(uv+off))));
+  draw(vec3(.99,.9,.8), S(.005,.0,abs(.175-length(uv+off))));
 }
 
 void main () {

@@ -144,35 +144,36 @@ void main () {
 
   // uv.y += min(fract(uv.x*2.), 1. - fract(uv.x*2.))*.2 - .05;
   // uv.x += min(fract(uv.y*2.), 1. - fract(uv.y*2.))*.2 - .05;
-  uv.y += sin(uv.x*10.)*.05;
+  // uv.y += sin(uv.x*10.)*.05;
+  // uv *= rotate(length(pow(uv.y+uv.x,4.)));
 
   // uv *= rotate(sin(min(length(uv),.53))/2);
   // uv *= rotate(PI*.25);
 
   draw(paper,
-       (smoothstep(.995,1.,cos(uv.x*25.+PI))
+       (smoothstep(.995,1.,cos(uv.x*25.))
         +smoothstep(.995,1.,cos(uv.y*25.+PI))
-       - smoothstep(.995,1.,cos(uv.x*25.+PI))
+       - smoothstep(.995,1.,cos(uv.x*25.))
         *smoothstep(.995,1.,cos(uv.y*25.+PI)))
 
-       *smoothstep(.634,.63,ngon(uv, vec2(0.),4))
+       *smoothstep(.634,.63,ngon(uv*vec2(1.25,1.), vec2(0.),4))
 
        );
 
 
-  for(float i =-.125*4; i<= .125*4; i+=.125*2.) {
-    for(float j =-.125*4; j<= .125*4.5; j+=.125*2.) {
-      // if(mod(i,.2)>.1 )
-      // thing1(vec2(i,j), floor(i*j*143)*PI*.5);
-      // if(fract(j*93.34092)>.8 ) {
-      //   if(fract(i*93.34092)>.2 ) {
-        // thing1(vec2(i,j), floor(i*j*15)*PI*.5 +PI);
-        thing1(vec2(i,j), floor(i*j*1991.39)*PI*.25 );
-        // thing2(vec2(i,j), 0.);
-      //   }
-      // }
-    }
-  }
+  // for(float i =-.125*4; i<= .125*4; i+=.125*2.) {
+  //   for(float j =-.125*4; j<= .125*4.5; j+=.125*2.) {
+  //     // if(mod(i,.2)>.1 )
+  //     // thing1(vec2(i,j), floor(i*j*143)*PI*.5);
+  //     // if(fract(j*93.34092)>.8 ) {
+  //     //   if(fract(i*93.34092)>.2 ) {
+  //       // thing1(vec2(i,j), floor(i*j*15)*PI*.5 +PI);
+  //       thing1(vec2(i,j), floor(i*j*1991.39)*PI*.25 );
+  //       // thing2(vec2(i,j), 0.);
+  //     //   }
+  //     // }
+  //   }
+  // }
 
 
   // draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124), vec2(0.124,.620))));
@@ -199,6 +200,18 @@ void main () {
   // draw(paper, S(.005,.0,line(uv, vec2(-0.125*2, -0.125*1), vec2(-.125*3.,-.125*2.))));
   // draw(paper, S(.005,.0,line(uv, vec2(-0.125*2, -0.125*1), vec2(-.125*3.,-.125*0.))));
   // draw(paper, S(.005,.0,line(uv, vec2(0.25, 0.5), vec2(0.,.0))));
+
+  draw(paper, S(.005,.0,line(uv, vec2(-.125*2, 0.125*1), vec2(0.,.125*5.))));
+  draw(paper, S(.005,.0,line(uv, vec2(.125*2, 0.125*1), vec2(0.,.125*5.))));
+  draw(paper, S(.005,.0,line(uv, vec2(.125*2, 0.125*1), vec2(.125*0.5,.125*2.5))));
+  draw(paper, S(.005,.0,line(uv, vec2(-.125*2, 0.125*1), vec2(-.125*3.5,.125*2.5))));
+
+
+  draw(paper, S(.005,.0,line(uv, vec2(.125*2, -0.125*1), vec2(0.,-.125*5.))));
+  draw(paper, S(.005,.0,line(uv, vec2(-.125*2, -0.125*1), vec2(0.,-.125*5.))));
+
+  draw(paper, S(.005,.0,line(uv, vec2(.125*2, -0.125*1), vec2(0.125*3.5,.125*.5))));
+  draw(paper, S(.005,.0,line(uv, vec2(-.125*2, -0.125*1), vec2(-0.125*.5,.125*.5))));
 
 
   gl_FragColor = vec4(c, 1.);

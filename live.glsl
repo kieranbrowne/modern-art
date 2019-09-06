@@ -154,7 +154,12 @@ void main () {
 
   for(float i =-.125*3; i<= .125*3; i+=.125) {
     for(float j =-.125*3; j<= .125*3; j+=.125) {
-      thing1(vec2(i,j), floor(i*j*13)*PI*.5);
+      // if(mod(i,.2)>.1 )
+      // thing1(vec2(i,j), floor(i*j*143)*PI*.5);
+      if(mod(j*49.,.9)>.5 ) {
+        // thing1(vec2(i,j), floor(i*j*15)*PI*.5 +PI);
+        thing1(vec2(i,j), floor(i*j*1119)*PI*.9 );
+      }
     }
   }
 

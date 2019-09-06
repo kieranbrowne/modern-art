@@ -143,6 +143,8 @@ void main () {
   vec3 paper = vec3(.99,.9,.8);
 
   // uv.y += min(fract(uv.x*2.), 1. - fract(uv.x*2.))*.2 - .05;
+  // uv.x += min(fract(uv.y*2.), 1. - fract(uv.y*2.))*.2 - .05;
+  uv.y += sin(uv.x*10.)*.05;
 
   // uv *= rotate(sin(min(length(uv),.53))/2);
   // uv *= rotate(PI*.25);
@@ -158,15 +160,15 @@ void main () {
        );
 
 
-  for(float i =-.125*3; i<= .125*3; i+=.125*2.) {
-    for(float j =-.125*3; j<= .125*3.5; j+=.125*2.) {
+  for(float i =-.125*4; i<= .125*4; i+=.125*2.) {
+    for(float j =-.125*4; j<= .125*4.5; j+=.125*2.) {
       // if(mod(i,.2)>.1 )
       // thing1(vec2(i,j), floor(i*j*143)*PI*.5);
       // if(fract(j*93.34092)>.8 ) {
       //   if(fract(i*93.34092)>.2 ) {
         // thing1(vec2(i,j), floor(i*j*15)*PI*.5 +PI);
-        thing1(vec2(i,j), floor(i*j*1991.39)*PI*.35 );
-        thing2(vec2(i,j), 0.);
+        thing1(vec2(i,j), floor(i*j*1991.39)*PI*.25 );
+        // thing2(vec2(i,j), 0.);
       //   }
       // }
     }

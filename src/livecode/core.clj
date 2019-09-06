@@ -6,7 +6,7 @@
 
  "./live.glsl"
  :width 680 :height 680
- :display-sync-hz 30
+ :display-sync-hz 1
  )
 
 (shader/stop)

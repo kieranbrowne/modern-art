@@ -135,6 +135,8 @@ void main () {
 
   vec3 paper = vec3(.99,.9,.8);
 
+  uv *= rotate(sin(min(length(uv),-.53)));
+
   draw(paper,
        (smoothstep(.995,1.,cos(uv.x*25.+PI))
         +smoothstep(.995,1.,cos(uv.y*25.+PI))
@@ -145,12 +147,17 @@ void main () {
 
        );
 
-  draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124), vec2(0.124,.620))));
+  // draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124), vec2(0.124,.620))));
   // draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124), vec2(0.124,-.620 +.122*4))));
-  draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124-.125*4), vec2(0.124,.620 -.125*4))));
+  // draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124-.125*4), vec2(0.124,.620 -.125*4))));
 
-  draw(paper, S(.005,.0,abs(.250-length(uv+.125))));
-  draw(paper, S(.005,.0,abs(.250-length(uv-.125 + vec2(.125*2,0.)))));
+
+  draw(paper, S(.005,.0,abs(.250-length(uv+.125)))
+       *step(-.125,uv.x)
+       *step(uv.y,.125));
+  draw(paper, S(.005,.0,abs(.250-length(uv+.125 +vec2(0.,-.125*3))))
+       *step(uv.x,-.125)
+       *step(-.125,uv.y));
   // draw(vec3(1.), S(.005,.0,line(uv, vec2(0.25, 0.5), vec2(0.,.0))));
   // draw(vec3(1.), S(.005,.0,line(uv, vec2(0.25, 0.5), vec2(0.,.0))));
 

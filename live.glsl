@@ -158,7 +158,7 @@ void main () {
       // thing1(vec2(i,j), floor(i*j*143)*PI*.5);
       // if(mod(j*9033.34,.9)>.1 ) {
         // thing1(vec2(i,j), floor(i*j*15)*PI*.5 +PI);
-        thing1(vec2(i,j), floor(i*j*11.39)*PI*.5 );
+        thing1(vec2(i,j), floor(i*j*191.39)*PI*.3333 );
       // }
     }
   }

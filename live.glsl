@@ -12,7 +12,7 @@ mat2 identity = mat2(1.,0.,0.,1.);
 // pixel pos
 vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 // background color
-vec3 c = vec3(.99,.9,.8);
+vec3 c = vec3(.99,.9,.84);
 
 //c.yx *= rotate(1.);
 
@@ -138,81 +138,35 @@ void thing2(vec2 off, float rot) {
 
 void main () {
 
-  draw(vec3(0.), smoothstep(.92,.91,ngon(uv, vec2(0.),4)));
+  draw(vec3(0.1), S(.95,.94, ngon(uv+cnoise(uv*314.)/512.,vec2(0.), 4)));
 
-  vec3 paper = vec3(.99,.9,.8);
+  // uv.x += pow(sin(min(0.,uv.y)*2.+t*2.),23.)/10;
 
-  // uv.y += min(fract(uv.x*2.), 1. - fract(uv.x*2.))*.2 - .05;
-  // uv.x += min(fract(uv.y*2.), 1. - fract(uv.y*2.))*.2 - .05;
-  // uv.y += sin(uv.x*10.)*.05;
-  // uv *= rotate(length(pow(uv.y+uv.x,4.)));
-
-  // uv *= rotate(sin(min(length(uv),.53))/2);
-  // uv *= rotate(PI*.25);
-
-  draw(paper,
-       (smoothstep(.995,1.,cos(uv.x*25.))
-        +smoothstep(.995,1.,cos(uv.y*25.+PI))
-       - smoothstep(.995,1.,cos(uv.x*25.))
-        *smoothstep(.995,1.,cos(uv.y*25.+PI)))
-
-       *smoothstep(.634,.63,ngon(uv*vec2(1.25,1.), vec2(0.),4))
-
-       );
+  float chalknoise = cnoise(-uv/2)/9.;
+  chalknoise += cnoise(-uv*4)/129.;
+  chalknoise += cnoise(-uv*144)/329.;
+  chalknoise += cnoise(-uv*184)/329.;
 
 
-  // for(float i =-.125*4; i<= .125*4; i+=.125*2.) {
-  //   for(float j =-.125*4; j<= .125*4.5; j+=.125*2.) {
-  //     // if(mod(i,.2)>.1 )
-  //     // thing1(vec2(i,j), floor(i*j*143)*PI*.5);
-  //     // if(fract(j*93.34092)>.8 ) {
-  //     //   if(fract(i*93.34092)>.2 ) {
-  //       // thing1(vec2(i,j), floor(i*j*15)*PI*.5 +PI);
-  //       thing1(vec2(i,j), floor(i*j*1991.39)*PI*.25 );
-  //       // thing2(vec2(i,j), 0.);
-  //     //   }
-  //     // }
-  //   }
-  // }
+  draw(vec3(.92), S(.007+max(-0.00,uv.x/100),.00, line(uv+chalknoise,vec2(-.3,.7), vec2(.3,.7))));
+  draw(vec3(.92), S(.004+max(-0.00,uv.y/200),-.003+max(-0.00,uv.y/200), line(uv+chalknoise,vec2(-.3,.68), vec2(-.3,.1))));
+  draw(vec3(.92), S(.004+max(-0.00,uv.y/100),-.008+max(-0.00,uv.y/100), line(uv+chalknoise,vec2(.3,.7), vec2(.3,.1))));
 
+  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(.1,.06), vec2(.3,.1+pow(uv.x*2.3,12.)))));
+  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(-.1,.06-pow(uv.x*3,19.)), vec2(-.28,.1))));
 
-  // draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124), vec2(0.124,.620))));
-  // draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124), vec2(0.124,-.620 +.122*4))));
-  // draw(paper, S(.005,.0,line(uv, vec2(0.124*3, .124-.125*4), vec2(0.124,.620 -.125*4))));
+  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(-.1,.06), vec2(-.15,-.2))));
+  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(.1,.06), vec2(.05,-.2))));
+  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(.34,-.26 -pow(uv.x*2.,9)), vec2(.05,-.2))));
 
+  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(-.400,-.26 -pow(uv.x*2.,9)), vec2(-.15,-.2))));
 
-  // draw(paper, S(.005,.0,abs(.250-length(uv+.125)))
-  //      *step(-.125,uv.x)
-  //      *step(uv.y,.125));
-
-  // draw(paper, S(.005,.0,abs(.250-length(uv+.125 +vec2(0.,-.125*3))))
-  //      *step(uv.x,-.125)
-  //      *step(-.125,uv.y));
-
-  // draw(paper, S(.005,.0,line(uv, vec2(0.125, 0.125), vec2(0.,.0))));
-  // draw(paper, S(.005,.0,line(uv, vec2(0.125*3, -0.125*3), vec2(0.,.0))));
-  // draw(paper, S(.005,.0,line(uv, vec2(0.125*3, -0.125*3), vec2(.125*2,-.125*4.))));
-
-  // draw(paper, S(.005,.0,line(uv, vec2(0.125, 0.125*2), vec2(-.125,.125*4.))));
-  // draw(paper, S(.005,.0,line(uv, vec2(-0.125*4, 0.125*1), vec2(-.125,.125*4.))));
-  // draw(paper, S(.005,.0,line(uv, vec2(-0.125*2, -0.125*4), vec2(.125*3.,.125*1.))));
-  // draw(paper, S(.005,.0,line(uv, vec2(-0.125*2, -0.125*4), vec2(-.125*3.,-.125*3.))));
-  // draw(paper, S(.005,.0,line(uv, vec2(-0.125*2, -0.125*1), vec2(-.125*3.,-.125*2.))));
-  // draw(paper, S(.005,.0,line(uv, vec2(-0.125*2, -0.125*1), vec2(-.125*3.,-.125*0.))));
-  // draw(paper, S(.005,.0,line(uv, vec2(0.25, 0.5), vec2(0.,.0))));
-
-  draw(paper, S(.005,.0,line(uv, vec2(-.125*2, 0.125*1), vec2(0.,.125*5.))));
-  draw(paper, S(.005,.0,line(uv, vec2(.125*2, 0.125*1), vec2(0.,.125*5.))));
-  draw(paper, S(.005,.0,line(uv, vec2(.125*2, 0.125*1), vec2(.125*0.5,.125*2.5))));
-  draw(paper, S(.005,.0,line(uv, vec2(-.125*2, 0.125*1), vec2(-.125*3.5,.125*2.5))));
-
-
-  draw(paper, S(.005,.0,line(uv, vec2(.125*2, -0.125*1), vec2(0.,-.125*5.))));
-  draw(paper, S(.005,.0,line(uv, vec2(-.125*2, -0.125*1), vec2(0.,-.125*5.))));
-
-  draw(paper, S(.005,.0,line(uv, vec2(.125*2, -0.125*1), vec2(0.125*3.5,.125*.5))));
-  draw(paper, S(.005,.0,line(uv, vec2(-.125*2, -0.125*1), vec2(-0.125*.5,.125*.5))));
-
+  draw(vec3(.92), S(.004,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(.20,.56), vec2(-.15,.56))*1.));
+  draw(vec3(.92), S(.005,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(.22,.46), vec2(-.15,.46))*1.));
+  draw(vec3(.92), S(.006,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(.21,.56), vec2(.22,.46))*1.));
+  draw(vec3(.92), S(.006,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(.21,.56), vec2(.22,.46))*1.));
+  draw(vec3(.92), S(.006,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(-.15,.56), vec2(-.14,.46))*1.));
+  // draw(vec3(.92), S(.011,-.009, -0.01+line(uv+chalknoise+cnoise(uv)/9.,vec2(-.12,-.26), vec2(.04,-.2))*2.));
 
   gl_FragColor = vec4(c, 1.);
 }

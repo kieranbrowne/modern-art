@@ -12,7 +12,7 @@ mat2 identity = mat2(1.,0.,0.,1.);
 // pixel pos
 vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 // background color
-vec3 c = vec3(.99,.9,.84);
+vec3 c = vec3(.95,.94,.93);
 
 //c.yx *= rotate(1.);
 
@@ -138,35 +138,11 @@ void thing2(vec2 off, float rot) {
 
 void main () {
 
-  draw(vec3(0.1), S(.95,.94, ngon(uv+cnoise(uv*314.)/512.,vec2(0.), 4)));
+  // draw(vec3(0.1), S(.95,.94, ngon(uv+cnoise(uv*314.)/512.,vec2(0.), 4)));
 
-  // uv.x += pow(sin(min(0.,uv.y)*2.+t*2.),23.)/10;
-
-  float chalknoise = cnoise(-uv/2)/9.;
-  chalknoise += cnoise(-uv*4)/129.;
-  chalknoise += cnoise(-uv*144)/329.;
-  chalknoise += cnoise(-uv*184)/329.;
+  draw(vec3(.9), S(.5,.4,ngon(uv, vec2(0.), 4)));
 
 
-  draw(vec3(.92), S(.007+max(-0.00,uv.x/100),.00, line(uv+chalknoise,vec2(-.3,.7), vec2(.3,.7))));
-  draw(vec3(.92), S(.004+max(-0.00,uv.y/200),-.003+max(-0.00,uv.y/200), line(uv+chalknoise,vec2(-.3,.68), vec2(-.3,.1))));
-  draw(vec3(.92), S(.004+max(-0.00,uv.y/100),-.008+max(-0.00,uv.y/100), line(uv+chalknoise,vec2(.3,.7), vec2(.3,.1))));
-
-  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(.1,.06), vec2(.3,.1+pow(uv.x*2.3,12.)))));
-  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(-.1,.06-pow(uv.x*3,19.)), vec2(-.28,.1))));
-
-  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(-.1,.06), vec2(-.15,-.2))));
-  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(.1,.06), vec2(.05,-.2))));
-  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(.34,-.26 -pow(uv.x*2.,9)), vec2(.05,-.2))));
-
-  draw(vec3(.92), S(.007,-.00, line(uv+chalknoise+cnoise(uv)/9.,vec2(-.400,-.26 -pow(uv.x*2.,9)), vec2(-.15,-.2))));
-
-  draw(vec3(.92), S(.004,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(.20,.56), vec2(-.15,.56))*1.));
-  draw(vec3(.92), S(.005,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(.22,.46), vec2(-.15,.46))*1.));
-  draw(vec3(.92), S(.006,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(.21,.56), vec2(.22,.46))*1.));
-  draw(vec3(.92), S(.006,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(.21,.56), vec2(.22,.46))*1.));
-  draw(vec3(.92), S(.006,-.000, line(uv+chalknoise+cnoise(uv)/9.,vec2(-.15,.56), vec2(-.14,.46))*1.));
-  // draw(vec3(.92), S(.011,-.009, -0.01+line(uv+chalknoise+cnoise(uv)/9.,vec2(-.12,-.26), vec2(.04,-.2))*2.));
 
   gl_FragColor = vec4(c, 1.);
 }

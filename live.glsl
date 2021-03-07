@@ -12,7 +12,7 @@ mat2 identity = mat2(1.,0.,0.,1.);
 // pixel pos
 vec2 uv = (gl_FragCoord.xy-.5*iResolution.xy) / iResolution.y * 2.;
 // background color
-vec3 c = vec3(.95,.94,.93);
+vec3 c = vec3(.85,.83,.80);
 
 //c.yx *= rotate(1.);
 
@@ -140,8 +140,24 @@ void main () {
 
   // draw(vec3(0.1), S(.95,.94, ngon(uv+cnoise(uv*314.)/512.,vec2(0.), 4)));
 
-  draw(vec3(.9), S(.5,.4,ngon(uv, vec2(0.), 4)));
+  draw(vec3(.9), S(.92,.89,ngon(uv*vec2(1.,1.1), vec2(0.,-.06), 4)));
 
+  // draw(vec3(.3),
+  //      clamp((cnoise(uv*13.*vec2(pow(uv.y-1,-1.)))*.5+.5)
+  //            *(cnoise(uv*9.*vec2(pow(uv.y-1,-1.)))*1.*(1.-uv.y/3.))
+  //            *(cnoise(uv*39.*vec2(pow(uv.y-1,-1.)))*.5+.9)
+  //            *(cnoise(uv*39.*vec2(pow(uv.y-1,-1.)))*1.*(1.-uv.y/3.))
+
+  //            ,0.,1.)
+
+  //      *S(.92,.89,ngon((uv+cnoise(uv*99.)/392.)*vec2(1.,1.1), vec2(0.,-.06), 4))
+  //      );
+
+
+  draw(vec3(.1),
+       :
+       1.
+       );
 
 
   gl_FragColor = vec4(c, 1.);

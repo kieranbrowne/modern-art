@@ -136,28 +136,43 @@ void thing2(vec2 off, float rot) {
   draw(vec3(.99,.9,.8), S(.005,.0,abs(.125-length(uv+off))));
 }
 
+void thing(vec2 pos) {
+  draw(vec3(.9,.3,.2)+cnoise(uv*150.)/20., S(pos.y,pos.y + .04,uv.y)*S(pos.y+1.04,pos.y+1.,uv.y)*S(pos.x,pos.x+1.,uv.x)*S(pos.x+ 1.1,pos.x+1.,uv.x)*(1.+cnoise(uv*10.)/2. +cnoise(uv*170.)/4.));
+}
+
 void main () {
 
-  // draw(vec3(0.1), S(.95,.94, ngon(uv+cnoise(uv*314.)/512.,vec2(0.), 4)));
 
-  draw(vec3(.9), S(.92,.89,ngon(uv*vec2(1.,1.1), vec2(0.,-.06), 4)));
+  draw(vec3(.9,.9,.88), 1.);
 
-  // draw(vec3(.3),
-  //      clamp((cnoise(uv*13.*vec2(pow(uv.y-1,-1.)))*.5+.5)
-  //            *(cnoise(uv*9.*vec2(pow(uv.y-1,-1.)))*1.*(1.-uv.y/3.))
-  //            *(cnoise(uv*39.*vec2(pow(uv.y-1,-1.)))*.5+.9)
-  //            *(cnoise(uv*39.*vec2(pow(uv.y-1,-1.)))*1.*(1.-uv.y/3.))
-
-  //            ,0.,1.)
-
-  //      *S(.92,.89,ngon((uv+cnoise(uv*99.)/392.)*vec2(1.,1.1), vec2(0.,-.06), 4))
-  //      );
+  vec2 gv = fract(uv*4.)-.5;
+  vec2 gn = floor(uv*4.);
 
 
-  draw(vec3(.1),
-       :
-       1.
-       );
+  //thing(vec2(.3, .6));
+
+  //draw(vec3(.1), S(0.41,0.4,ngon(gv + cnoise(gv*1. + gv*2. + gn)*.02, vec2(0.), 4 )));
+
+
+  draw(vec3(.9,1.0,.1)*1., S(.9,.0,sdBox(uv,vec2(.10))));
+  draw(vec3(.9,.80,.7)*1.2, S(.09,.0,sdBox(uv,vec2(.30))));
+  uv += vec2(cnoise(uv*8.),cnoise(uv*8.)*1.)*.01 ;
+  draw(vec3(.9,0.9,.9), S(-.1,.3,sdBox(uv,vec2(0.4))));
+  uv += vec2(cnoise(uv*18.),cnoise(uv*18.)*1.)*.01 ;
+  uv += vec2(cnoise(uv*58.),cnoise(uv*58.)*1.)*.01 ;
+  draw(vec3(1.,1.0,.4), S(.0,.7,sdBox(uv,vec2(0.4))));
+  //uv += vec2(cnoise(uv*108.),cnoise(uv*108.)*1.)*.02 ;
+  draw(vec3(.4,0.9,.4)*1.4, S(.1,.49,sdBox(uv,vec2(0.6))));
+
+
+  //draw(vec3(.6,0.5,.9), S(.1,.49,sdBox(uv,vec2(0.6))));
+  //draw(vec3(.1,0.2,.4), S(.0,.1,sdBox(uv,vec2(0.8))));
+
+  //draw(vec3(.9,.9,.88)*.8, cnoise(uv*100.)/7.);
+  //draw(vec3(.9,.9,.88)*.8, cnoise(uv*140. +cnoise(uv*3.))/3.);
+
+
+  //draw(vec3(.9), S(.002,0., mod(uv.x,0.1) ) + S(.002,0., mod(uv.y,0.1) ));
 
 
   gl_FragColor = vec4(c, 1.);
